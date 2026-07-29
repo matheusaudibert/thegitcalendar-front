@@ -21,9 +21,9 @@ const DEFAULT_WIDTH = 1179;
 const DEFAULT_HEIGHT = 2556;
 
 const SHOWCASE_EXAMPLES = [
-  "https://gitcallendar-image.vercel.app/graph?username=Gildaciolopes&background=dark&color=purple&shape=square",
-  "https://gitcallendar-image.vercel.app/graph?username=matheusaudibert&background=github&color=green&shape=rounded",
-  "https://gitcallendar-image.vercel.app/graph?username=caio-bittencourt&background=light&color=blue&shape=circle",
+  "/phone_1.png",
+  "/phone_1.png",
+  "/phone_1.png",
 ];
 
 export default function Home() {
