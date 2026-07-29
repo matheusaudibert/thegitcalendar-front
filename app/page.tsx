@@ -128,7 +128,7 @@ export default function Home() {
         </footer>
 
         <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
-          <DrawerContent className="mx-auto h-[95vh]! max-h-[95vh]! w-full max-w-[650px]!">
+          <DrawerContent className="mx-auto h-[95vh]! max-h-[95vh]! w-[calc(100%-1.5rem)] max-w-[650px]! sm:w-full">
             <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-8 sm:px-6">
               <StepShell
                 number={1}

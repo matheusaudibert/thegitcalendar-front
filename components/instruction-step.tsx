@@ -1,7 +1,8 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { InfoIcon, Copy, Check } from "lucide-react";
+import { TriangleAlert, Copy, Check } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { StepShell } from "@/components/step-shell";
@@ -46,8 +47,8 @@ function UrlLine({ url }: { url: string }) {
   );
 }
 
-function renderLine(line: string, imageUrl: string, key: number) {
-  if (line === URL_TOKEN) {
+function renderLine(line: ReactNode, imageUrl: string, key: number) {
+  if (typeof line === "string" && line === URL_TOKEN) {
     return <UrlLine key={key} url={imageUrl} />;
   }
   return (
@@ -76,8 +77,8 @@ export function InstructionStepView({
               {action.details.map((line, i) => renderLine(line, imageUrl, i))}
             </div>
             {action.note && (
-              <Alert className="mt-2">
-                <InfoIcon />
+              <Alert variant="warning" className="mt-2">
+                <TriangleAlert />
                 <AlertDescription>{action.note}</AlertDescription>
               </Alert>
             )}

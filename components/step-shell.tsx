@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 
 type StepShellProps = {
   number: number;
-  title: string;
-  description?: string;
+  title: ReactNode;
+  description?: ReactNode;
   isLast?: boolean;
   children: ReactNode;
   className?: string;
