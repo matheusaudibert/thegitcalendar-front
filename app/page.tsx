@@ -22,8 +22,8 @@ const DEFAULT_HEIGHT = 2556;
 
 const SHOWCASE_EXAMPLES = [
   "/phone_1.png",
-  "/phone_1.png",
-  "/phone_1.png",
+  "/phone_2.png",
+  "/phone_3.png",
 ];
 
 export default function Home() {
