@@ -10,6 +10,20 @@ export type AndroidDevice = Device & {
   brand: string;
 };
 
+export const MAC_DEVICES: Device[] = [
+  { label: "MacBook Air 13″ (M2/M3/M4)", width: 2560, height: 1664 },
+  { label: "MacBook Air 15″", width: 2880, height: 1864 },
+  { label: "MacBook Pro 13″ / MacBook Air 13″ (older)", width: 2560, height: 1600 },
+  { label: "MacBook Pro 14″", width: 3024, height: 1964 },
+  { label: "MacBook Pro 16″", width: 3456, height: 2234 },
+  { label: "iMac 24″", width: 4480, height: 2520 },
+  { label: "Studio Display / Generic 5K", width: 5120, height: 2880 },
+  { label: "Pro Display XDR", width: 6016, height: 3384 },
+  { label: "Generic Full HD (1920 x 1080)", width: 1920, height: 1080 },
+  { label: "Generic QHD (2560 x 1440)", width: 2560, height: 1440 },
+  { label: "Generic 4K (3840 x 2160)", width: 3840, height: 2160 },
+];
+
 export const IPHONE_DEVICES: Device[] = [
   { label: "iPhone 13 / 13 Pro / 14 / 14 Pro", width: 1170, height: 2532 },
   { label: "iPhone 13 mini", width: 1080, height: 2340 },

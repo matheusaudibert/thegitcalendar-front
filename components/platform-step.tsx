@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentType } from "react";
-import { FaApple } from "react-icons/fa6";
+import { FaApple, FaLaptop } from "react-icons/fa6";
 import { SiAndroid } from "react-icons/si";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -30,11 +30,17 @@ const PLATFORMS: {
     description: "MacroDroid automation",
     icon: SiAndroid,
   },
+  {
+    value: "mac",
+    label: "Mac",
+    description: "macOS Shortcuts automation",
+    icon: FaLaptop,
+  },
 ];
 
 export function PlatformStep({ value, onChange }: PlatformStepProps) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-3 gap-3">
       {PLATFORMS.map((platform) => {
         const Icon = platform.icon;
         const selected = value === platform.value;

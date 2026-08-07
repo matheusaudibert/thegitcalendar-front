@@ -4,7 +4,7 @@ import { useReducer } from "react";
 import type { Device } from "@/lib/devices";
 import type { Background, ColorName, Shape } from "@/lib/build-image-url";
 
-export type Platform = "apple" | "android";
+export type Platform = "apple" | "android" | "mac";
 
 export type WizardState = {
   username: string;
