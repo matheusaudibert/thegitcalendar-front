@@ -108,6 +108,48 @@ export const APPLE_INSTRUCTIONS: InstructionStep[] = [
   },
 ];
 
+export const MAC_INSTRUCTIONS: InstructionStep[] = [
+  {
+    number: 5,
+    title: "Create shortcut",
+    paragraphs: [
+      [
+        "Open ",
+        b("shortcuts-mac", "Shortcuts"),
+        " (pre-installed since macOS Monterey) → Go to ",
+        b("automation-mac", "Automation"),
+        " tab → New Automation → ",
+        b("time-of-day-mac", "Time of Day"),
+        " → ",
+        b("time-mac", "6:00 AM"),
+        " → Repeat ",
+        b("daily-mac", '"Daily"'),
+        " → Select ",
+        b("run-immediately-mac", '"Run Immediately"'),
+        " → ",
+        b("create-shortcut-mac", '"Create New Shortcut"'),
+      ],
+    ],
+  },
+  {
+    number: 6,
+    title: "Create automation",
+    paragraphs: ["Add these actions:"],
+    actions: [
+      {
+        number: "6.1",
+        title: "Get Contents of URL",
+        details: ["Paste the following URL there:", URL_TOKEN],
+      },
+      {
+        number: "6.2",
+        title: "Set Desktop Picture",
+        details: ["Set the input to the downloaded image"],
+      },
+    ],
+  },
+];
+
 export const ANDROID_INSTRUCTIONS: InstructionStep[] = [
   {
     number: 5,

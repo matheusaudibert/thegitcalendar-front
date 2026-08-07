@@ -15,7 +15,11 @@ import { InstructionStepView } from "@/components/instruction-step";
 import { useWizardState } from "@/hooks/use-wizard-state";
 import { useGithubUser } from "@/hooks/use-github-user";
 import { buildImageUrl } from "@/lib/build-image-url";
-import { APPLE_INSTRUCTIONS, ANDROID_INSTRUCTIONS } from "@/lib/instructions";
+import {
+  APPLE_INSTRUCTIONS,
+  ANDROID_INSTRUCTIONS,
+  MAC_INSTRUCTIONS,
+} from "@/lib/instructions";
 
 const DEFAULT_WIDTH = 1179;
 const DEFAULT_HEIGHT = 2556;
@@ -50,7 +54,11 @@ export default function Home() {
   );
 
   const instructions =
-    state.platform === "android" ? ANDROID_INSTRUCTIONS : APPLE_INSTRUCTIONS;
+    state.platform === "android"
+      ? ANDROID_INSTRUCTIONS
+      : state.platform === "mac"
+        ? MAC_INSTRUCTIONS
+        : APPLE_INSTRUCTIONS;
 
   return (
     <main className="flex min-h-screen flex-col bg-background px-4 sm:px-6">
