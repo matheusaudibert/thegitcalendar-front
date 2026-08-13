@@ -45,7 +45,3 @@ next-env.d.ts
 .claude/
 .mcp.json
 skills-lock.json
-
-# social preview card (source + generated image)
-/preview.html
-/scripts/render-preview.mjs

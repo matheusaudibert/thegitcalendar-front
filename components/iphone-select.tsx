@@ -9,13 +9,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IPHONE_DEVICES, type Device } from "@/lib/devices";
+import type { Dictionary } from "@/lib/i18n";
 
 type IphoneSelectProps = {
+  t: Dictionary;
   value: Device | null;
   onChange: (device: Device) => void;
 };
 
-export function IphoneSelect({ value, onChange }: IphoneSelectProps) {
+export function IphoneSelect({ t, value, onChange }: IphoneSelectProps) {
   return (
     <Select
       value={value?.label ?? null}
@@ -26,7 +28,7 @@ export function IphoneSelect({ value, onChange }: IphoneSelectProps) {
     >
       <SelectTrigger className="w-full">
         <Smartphone className="text-muted-foreground" />
-        <SelectValue placeholder="Select your iPhone model" />
+        <SelectValue placeholder={t.wizard.iphonePlaceholder} />
       </SelectTrigger>
       <SelectContent>
         {IPHONE_DEVICES.map((device) => (

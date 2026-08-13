@@ -14,13 +14,15 @@ import {
   ComboboxItem,
 } from "@/components/ui/combobox";
 import { ANDROID_DEVICES, type AndroidDevice, type Device } from "@/lib/devices";
+import type { Dictionary } from "@/lib/i18n";
 
 type AndroidComboboxProps = {
+  t: Dictionary;
   value: Device | null;
   onChange: (device: AndroidDevice) => void;
 };
 
-export function AndroidCombobox({ value, onChange }: AndroidComboboxProps) {
+export function AndroidCombobox({ t, value, onChange }: AndroidComboboxProps) {
   const virtualizerRef = React.useRef<Virtualizer<HTMLDivElement, Element> | null>(null);
 
   return (
@@ -49,13 +51,13 @@ export function AndroidCombobox({ value, onChange }: AndroidComboboxProps) {
         }
       }}
     >
-      <ComboboxInput placeholder="Search your Android device...">
+      <ComboboxInput placeholder={t.wizard.androidPlaceholder}>
         <InputGroupAddon align="inline-start">
           <Smartphone className="text-muted-foreground" />
         </InputGroupAddon>
       </ComboboxInput>
       <ComboboxContent>
-        <ComboboxEmpty>No device found.</ComboboxEmpty>
+        <ComboboxEmpty>{t.wizard.deviceEmpty}</ComboboxEmpty>
         <ComboboxList className="max-h-none overflow-visible p-0">
           <VirtualizedDeviceList virtualizerRef={virtualizerRef} />
         </ComboboxList>

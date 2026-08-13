@@ -49,7 +49,7 @@ export function StoreLink({ label, storeUrl, appScheme }: StoreLinkProps) {
       onClick={handleClick}
       target="_blank"
       rel="noopener noreferrer"
-      className="font-semibold text-white underline underline-offset-4 hover:opacity-80"
+      className="rounded font-semibold text-foreground underline underline-offset-4 hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       {label}
     </a>
