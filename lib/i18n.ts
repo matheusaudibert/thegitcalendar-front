@@ -64,7 +64,7 @@ type DictionaryValue =
 export const dictionaries = {
   en: {
     title: "The Git Calendar",
-    subtitle: "Show your contributions on your mobile screen.",
+    subtitle: "Show your GitHub contributions on your mobile screen.",
     builtBy: "Built by",
     metaDescription:
       "Turn your GitHub contribution graph into a wallpaper that updates itself every day.",
