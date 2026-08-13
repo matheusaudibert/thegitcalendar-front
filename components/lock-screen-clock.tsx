@@ -96,7 +96,8 @@ export function LockScreenClock({ locale }: { locale: Locale }) {
         {formatDate(now, intlLocale)}
       </span>
       <span
-        className="mt-[calc(1*var(--u))] text-[calc(50*var(--u))] leading-none font-semibold tracking-[-0.02em] tabular-nums"
+        className="mt-[calc(1*var(--u)+5px)] text-[calc(50*var(--u))] leading-none font-semibold tracking-[-0.02em] tabular-nums sm:mt-[calc(1*var(--u))]"
+
         /* The bundled SF Pro only ships Semibold, and asking for 700 would make
            the browser synthesise a smeared fake bold. A hairline stroke in the
            text's own colour thickens the stems cleanly instead, and scales with
