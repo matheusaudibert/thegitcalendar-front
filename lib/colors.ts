@@ -1,19 +1,35 @@
-import type { ColorName } from "@/lib/build-image-url";
+import type { Background, ColorName } from "@/lib/build-image-url";
 
-export const COLOR_OPTIONS: { value: ColorName; label: string; swatch: string }[] = [
-  { value: "green", label: "Green", swatch: "#39d353" },
-  { value: "blue", label: "Blue", swatch: "#3b82f6" },
-  { value: "purple", label: "Purple", swatch: "#a855f7" },
-  { value: "red", label: "Red", swatch: "#ef4444" },
-  { value: "yellow", label: "Yellow", swatch: "#eab308" },
-  { value: "orange", label: "Orange", swatch: "#f97316" },
-  { value: "pink", label: "Pink", swatch: "#ec4899" },
-  { value: "white", label: "White", swatch: "#f5f5f5" },
-  { value: "black", label: "Black", swatch: "#18181b" },
+/**
+ * Swatches are the level-4 (brightest) shade of each theme in the renderer's
+ * own palette — `app/themes.py` in the backend — so what the picker shows is
+ * literally the colour a full-contribution day comes back as. Labels live in
+ * the dictionaries, keyed by `value`.
+ */
+export const COLOR_OPTIONS: { value: ColorName; swatch: string }[] = [
+  { value: "green", swatch: "#39d353" },
+  { value: "blue", swatch: "#54aeff" },
+  { value: "purple", swatch: "#a371f7" },
+  { value: "red", swatch: "#ff7b72" },
+  { value: "yellow", swatch: "#e3b341" },
+  { value: "orange", swatch: "#ffa657" },
+  { value: "pink", swatch: "#ff9bce" },
+  { value: "white", swatch: "#ffffff" },
+  { value: "black", swatch: "#000000" },
 ];
 
-export const BACKGROUND_OPTIONS: { value: "github" | "dark" | "light"; label: string; swatch: string }[] = [
-  { value: "github", label: "GitHub", swatch: "#0d1117" },
-  { value: "dark", label: "Dark", swatch: "#1a1a1a" },
-  { value: "light", label: "Light", swatch: "#ffffff" },
+/** Same source: the `BACKGROUND_THEMES` presets the `background` param selects. */
+export const BACKGROUND_OPTIONS: { value: Background; swatch: string }[] = [
+  { value: "github", swatch: "#0d1117" },
+  { value: "dark", swatch: "#1a1a1a" },
+  { value: "light", swatch: "#ffffff" },
+];
+
+export const SHAPE_OPTIONS: {
+  value: "rounded" | "square" | "circle";
+  radiusClass: string;
+}[] = [
+  { value: "rounded", radiusClass: "rounded-[5px]" },
+  { value: "square", radiusClass: "rounded-none" },
+  { value: "circle", radiusClass: "rounded-full" },
 ];

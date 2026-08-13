@@ -1,4 +1,4 @@
-// Generated from https://github.com/matheusaudibert/gitcallendar RESOLUTIONS.md — do not hand-edit device rows.
+// Generated from https://github.com/matheusaudibert/thegitcalendar/blob/main/RESOLUTIONS.md — do not hand-edit device rows.
 
 export type Device = {
   label: string;
@@ -11,16 +11,17 @@ export type AndroidDevice = Device & {
 };
 
 export const IPHONE_DEVICES: Device[] = [
-  { label: "iPhone 13 / 13 Pro / 14 / 14 Pro", width: 1170, height: 2532 },
-  { label: "iPhone 13 mini", width: 1080, height: 2340 },
-  { label: "iPhone 13 Pro Max / 14 Plus / 14 Pro Max", width: 1284, height: 2778 },
-  { label: "iPhone 15 / 15 Pro / 16", width: 1179, height: 2556 },
-  { label: "iPhone 15 Plus / 15 Pro Max / 16 Plus", width: 1290, height: 2796 },
-  { label: "iPhone 16 Pro", width: 1206, height: 2622 },
-  { label: "iPhone 16 Pro Max", width: 1320, height: 2868 },
-  { label: "iPhone 17", width: 1179, height: 2556 },
-  { label: "iPhone 17 Pro", width: 1206, height: 2622 },
-  { label: "iPhone 17 Pro Max", width: 1320, height: 2868 },
+  { label: "iPhone 11", width: 828, height: 1792 },
+  { label: "iPhone 11 Pro", width: 1125, height: 2436 },
+  { label: "iPhone 11 Pro Max", width: 1242, height: 2688 },
+  { label: "iPhone 12 / 12 Pro / 13 / 13 Pro / 14 / 16e / 17e", width: 1170, height: 2532 },
+  { label: "iPhone 12 mini / 13 mini", width: 1080, height: 2340 },
+  { label: "iPhone 12 Pro Max / 13 Pro Max / 14 Plus", width: 1284, height: 2778 },
+  { label: "iPhone 14 Pro / 15 / 15 Pro / 16", width: 1179, height: 2556 },
+  { label: "iPhone 14 Pro Max / 15 Plus / 15 Pro Max / 16 Plus", width: 1290, height: 2796 },
+  { label: "iPhone 16 Pro / 17 / 17 Pro", width: 1206, height: 2622 },
+  { label: "iPhone 16 Pro Max / 17 Pro Max", width: 1320, height: 2868 },
+  { label: "iPhone Air", width: 1260, height: 2736 },
 ];
 
 export const ANDROID_DEVICES: AndroidDevice[] = [

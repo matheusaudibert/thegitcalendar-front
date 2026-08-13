@@ -1,15 +1,30 @@
+import { LockScreenClock } from "@/components/lock-screen-clock";
+import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type PhoneMockupProps = {
   imageUrl: string;
+  alt: string;
+  locale: Locale;
   className?: string;
 };
 
-export function PhoneMockup({ imageUrl, className }: PhoneMockupProps) {
+/**
+ * iPhone frame drawn entirely in CSS. Every dimension is a multiple of `--u`,
+ * so the whole device scales by changing that single custom property. The
+ * `min(..., vh)` cap keeps the phone from outgrowing short viewports.
+ */
+export function PhoneMockup({
+  imageUrl,
+  alt,
+  locale,
+  className,
+}: PhoneMockupProps) {
   return (
     <div
       className={cn(
-        "relative aspect-[180/380] w-[calc(180*var(--u))] shrink-0 [--u:min(1.45px,0.132vh)] sm:[--u:min(1.3px,0.132vh)] md:[--u:min(1.45px,0.132vh)] lg:[--u:min(1.6px,0.132vh)]",
+        "relative aspect-[180/380] w-[calc(180*var(--u))] shrink-0",
+        "[--u:min(1.35px,0.19vh)] sm:[--u:min(1.55px,0.19vh)] md:[--u:min(1.6px,0.19vh)] lg:[--u:min(1.95px,0.19vh)]",
         className
       )}
     >
@@ -19,9 +34,10 @@ export function PhoneMockup({ imageUrl, className }: PhoneMockupProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
-              alt="GitCalendar wallpaper example"
+              alt={alt}
               className="h-full w-full object-cover"
             />
+            <LockScreenClock locale={locale} />
           </div>
         </div>
       </div>

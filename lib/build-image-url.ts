@@ -11,7 +11,11 @@ export type ColorName =
   | "black";
 export type Shape = "rounded" | "square" | "circle";
 
-export const IMAGE_ENDPOINT = "https://gitcallendar-image.vercel.app/graph";
+/**
+ * Canonical host: `gitcallendar-image` (two L's) 307-redirects here, so we
+ * point straight at the target and skip the extra hop on every image load.
+ */
+export const IMAGE_ENDPOINT = "https://gitcalendar-image.vercel.app/graph";
 
 export type BuildImageUrlParams = {
   username: string;
