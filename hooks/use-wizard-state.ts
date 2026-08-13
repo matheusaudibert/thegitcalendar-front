@@ -6,10 +6,18 @@ import type { Background, ColorName, Shape } from "@/lib/build-image-url";
 
 export type Platform = "apple" | "android";
 
+/**
+ * Platform is deliberately absent: it is decided by which hero button opened
+ * the drawer, so it arrives as a prop rather than as wizard state.
+ *
+ * `device` is stored with the platform it was picked under. The drawer stays
+ * mounted between openings, so without that tag an Android phone chosen in one
+ * session would still be selected after reopening for iOS.
+ */
 export type WizardState = {
   username: string;
-  platform: Platform | null;
   device: Device | null;
+  devicePlatform: Platform | null;
   background: Background;
   color: ColorName;
   shape: Shape;
@@ -17,16 +25,15 @@ export type WizardState = {
 
 type WizardAction =
   | { type: "SET_USERNAME"; value: string }
-  | { type: "SET_PLATFORM"; value: Platform }
-  | { type: "SET_DEVICE"; value: Device }
+  | { type: "SET_DEVICE"; value: Device; platform: Platform }
   | { type: "SET_BACKGROUND"; value: Background }
   | { type: "SET_COLOR"; value: ColorName }
   | { type: "SET_SHAPE"; value: Shape };
 
 const initialState: WizardState = {
   username: "",
-  platform: null,
   device: null,
+  devicePlatform: null,
   background: "github",
   color: "green",
   shape: "rounded",
@@ -36,11 +43,8 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
   switch (action.type) {
     case "SET_USERNAME":
       return { ...state, username: action.value };
-    case "SET_PLATFORM":
-      // Changing platform invalidates a previously chosen device (different device pools).
-      return { ...state, platform: action.value, device: null };
     case "SET_DEVICE":
-      return { ...state, device: action.value };
+      return { ...state, device: action.value, devicePlatform: action.platform };
     case "SET_BACKGROUND":
       return { ...state, background: action.value };
     case "SET_COLOR":

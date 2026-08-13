@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
-export type GithubUserStatus = "idle" | "checking" | "valid" | "invalid";
+/**
+ * `rate-limited` is kept apart from `invalid` on purpose: the API is called
+ * unauthenticated from the browser (60 requests/hour/IP), and telling someone
+ * their username does not exist when we simply could not ask is a lie.
+ */
+export type GithubUserStatus =
+  | "idle"
+  | "checking"
+  | "valid"
+  | "invalid"
+  | "rate-limited";
 
 export type GithubUserResult = {
   status: GithubUserStatus;
@@ -12,7 +22,7 @@ export type GithubUserResult = {
 
 type Resolved = {
   username: string;
-  status: "valid" | "invalid";
+  status: "valid" | "invalid" | "rate-limited";
   avatarUrl: string | null;
 };
 
