@@ -4,15 +4,14 @@ import { Hero } from "@/components/hero";
 import { SiteFooter } from "@/components/site-footer";
 import { Testimonial } from "@/components/testimonial";
 import { getDictionary } from "@/lib/locale";
-import { pickShowcaseUser } from "@/lib/showcase-users";
+import { SHOWCASE_USER } from "@/lib/showcase-users";
 
 export default async function Home() {
   const { locale, t } = await getDictionary();
-  const username = pickShowcaseUser();
 
   return (
     <main className="flex flex-1 flex-col">
-      <Hero t={t} locale={locale} username={username} />
+      <Hero t={t} locale={locale} username={SHOWCASE_USER} />
 
       {/* One `gap` owns the rhythm between the three sections, so it cannot
           drift the way per-section margins do. `pb` is the run-up to the
