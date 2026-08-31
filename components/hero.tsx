@@ -2,7 +2,7 @@ import { InstallButtons } from "@/components/install-buttons";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { PhoneMockup } from "@/components/phone-mockup";
 import type { Dictionary, Locale } from "@/lib/i18n";
-import { buildWallpaperUrl, githubProfileUrl } from "@/lib/showcase-users";
+import { WALLPAPER_URL, githubProfileUrl } from "@/lib/showcase-users";
 
 const AUTHOR_AVATAR_URL = "https://avatars.githubusercontent.com/u/85813476?v=4";
 const AUTHOR_TWITTER_URL = "https://x.com/audibertdev";
@@ -79,7 +79,7 @@ export function Hero({
                 under the whole grid cell. */}
             <div className="flex flex-col items-center gap-5">
               <PhoneMockup
-                imageUrl={buildWallpaperUrl(username)}
+                imageUrl={WALLPAPER_URL}
                 alt={t.wallpaperAlt}
                 locale={locale}
               />
