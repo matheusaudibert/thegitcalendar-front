@@ -9,6 +9,8 @@ import { StoreLink } from "@/components/store-link";
  *   `**bold**`            → <strong>
  *   `` `code` ``          → <code>, for file paths and filenames
  *   `[label](url)`        → <a>, styled exactly like the surrounding text
+ *                           (the label itself is rendered recursively, so
+ *                           `[**label**](url)` gives a bold link)
  *   `https://example.com` → <a>, underlined, showing the raw URL
  *
  * The bare-URL branch deliberately ends on a non-punctuation character,
@@ -62,7 +64,8 @@ export function renderRichText(text: string): ReactNode[] {
              only the pointer giving it away. */
           className={`cursor-pointer ${FOCUS_RING}`}
         >
-          {label}
+          {/* Recursive so a label can carry its own markup, e.g. `[**x**](url)`. */}
+          {renderRichText(label)}
         </a>
       );
     }

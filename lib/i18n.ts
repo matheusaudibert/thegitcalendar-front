@@ -82,19 +82,14 @@ export const dictionaries = {
     faqTitle: "FAQ",
     faq: [
       {
-        question: "Is the project open source?",
-        answer:
-          "Yes, the project is open source and lives in these repositories: https://github.com/matheusaudibert/thegitcalendar and https://github.com/matheusaudibert/thegitcalendar-front. Yes, I split the back end and the front end.",
-      },
-      {
         question: "Can I customize the wallpaper?",
         answer:
-          "Yes, you can customize the wallpaper. You can change the color and the shape of the contributions, as well as the background color of the image. To see every possible combination, go to https://github.com/matheusaudibert/thegitcalendar/blob/main/EXAMPLES.md.",
+          "Yes, you can customize the wallpaper. You can change the color and the shape of the contributions, as well as the background color of the image.",
       },
       {
         question: "Does the wallpaper count private contributions?",
         answer:
-          "No, the wallpaper does not count private contributions. For them to show up, you have to enable them in your GitHub account. For more information, see this article: https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions.",
+          "No, the wallpaper does not count private contributions. For them to show up, you have to enable them in your GitHub account. For more information, [**see this article**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
       },
       {
         question: "Does the project support every phone?",
@@ -225,19 +220,14 @@ export const dictionaries = {
     faqTitle: "FAQ",
     faq: [
       {
-        question: "O projeto é open source?",
-        answer:
-          "Sim, o projeto é open source, e está disponível nos seguintes repositórios: https://github.com/matheusaudibert/thegitcalendar e https://github.com/matheusaudibert/thegitcalendar-front. Sim, eu separei back e front end.",
-      },
-      {
         question: "Posso personalizar o wallpaper?",
         answer:
-          "Sim, você pode personalizar o wallpaper. Você pode editar a cor e o formato das contribuições e a cor do fundo da imagem. Para visualizar todas as combinações possíveis de personalização do wallpaper, acesse https://github.com/matheusaudibert/thegitcalendar/blob/main/EXAMPLES.md.",
+          "Sim, você pode personalizar o wallpaper. Você pode editar a cor e o formato das contribuições e a cor do fundo da imagem.",
       },
       {
         question: "O wallpaper conta as contribuições privadas?",
         answer:
-          "Não, o wallpaper não conta as contribuições privadas. Para elas aparecerem você deve habilitá-las em sua conta do GitHub. Para mais informações acesse esse artigo: https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions.",
+          "Não, o wallpaper não conta as contribuições privadas. Para elas aparecerem você deve habilitá-las em sua conta do GitHub. Para mais informações [**acesse esse artigo**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
       },
       {
         question: "O projeto contém todos os celulares?",
