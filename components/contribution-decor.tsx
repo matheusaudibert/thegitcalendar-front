@@ -5,10 +5,6 @@ import { cn } from "@/lib/utils";
  * both sides of the viewport from top to bottom. Each is generated from a
  * fixed seed, so the two sides differ from each other but render the same on
  * every visit and on server and client alike.
- *
- * Only some days start out painted; the rest are committed one by one over
- * the following minutes, so the graphs fill in while the visitor is on the
- * page. It is all CSS animation delays, so no script runs for it.
  */
 
 const COLUMNS = 17;
@@ -36,13 +32,13 @@ const MAX_INSET = 6;
 /** Chance of a stray gap in the inner half, which roughens the edge. */
 const GAP_ODDS = 0.12;
 
-/** Share of the active days already painted when the page opens. */
-const PAINTED_AT_START = 0.2;
-/** Seconds over which the remaining days get painted. */
-const PAINT_WINDOW = 120;
+/**
+ * Share of the active days actually painted; the rest are left empty, which
+ * keeps the graphs sparse enough to sit behind the content.
+ */
+const PAINTED_SHARE = 0.2;
 
-/** `delay` is when the day gets painted, in seconds; 0 means from the start. */
-type Cell = { x: number; y: number; level: number; delay: number };
+type Cell = { x: number; y: number; level: number };
 
 /** mulberry32: a tiny seeded PRNG, so the pattern is fixed per seed. */
 function seededRandom(seed: number) {
@@ -62,8 +58,8 @@ function seededRandom(seed: number) {
  */
 function generateCells(seed: number): Cell[] {
   const random = seededRandom(seed);
-  // A stream of its own, so the timing never shifts the pattern itself.
-  const timing = seededRandom(seed + 1);
+  // A stream of its own, so thinning the days never shifts the pattern.
+  const painted = seededRandom(seed + 1);
   const cells: Cell[] = [];
   let inset = MAX_INSET / 2;
 
@@ -74,14 +70,9 @@ function generateCells(seed: number): Cell[] {
     for (let x = Math.round(inset); x < COLUMNS; x++) {
       if (x < COLUMNS / 2 && random() < GAP_ODDS) continue;
       const roll = random();
-      const level = LEVEL_ODDS.findIndex((odds) => roll < odds);
-      const start = timing();
-      const delay =
-        level === 0 || start < PAINTED_AT_START
-          ? 0
-          : ((start - PAINTED_AT_START) / (1 - PAINTED_AT_START)) *
-            PAINT_WINDOW;
-      cells.push({ x: x * PITCH, y: y * PITCH, level, delay });
+      const active = LEVEL_ODDS.findIndex((odds) => roll < odds);
+      const level = painted() < PAINTED_SHARE ? active : 0;
+      cells.push({ x: x * PITCH, y: y * PITCH, level });
     }
   }
   return cells;
@@ -114,7 +105,7 @@ function Graph({
         className,
       )}
     >
-      {cells.map(({ x, y, level, delay }) => (
+      {cells.map(({ x, y, level }) => (
         <rect
           key={`${x}-${y}`}
           x={x}
@@ -122,11 +113,7 @@ function Graph({
           width={CELL}
           height={CELL}
           rx={5}
-          className={cn(
-            LEVEL_FILL[level],
-            delay > 0 && "animate-commit motion-reduce:animate-none",
-          )}
-          style={delay > 0 ? { animationDelay: `${delay}s` } : undefined}
+          className={LEVEL_FILL[level]}
         />
       ))}
     </svg>

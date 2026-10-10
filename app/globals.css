@@ -40,21 +40,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* A contribution-graph day getting its commits: it holds the empty-day color
-   until its delay, then eases into its own fill. Only `from` is given, so the
-   end state is whatever level the cell is drawn at. */
 @theme {
-  /* A day with no commits: the foreground (oklch 96%) at 3%. Written as
-     legacy `rgb()` like the level colors it animates into; Chrome interpolates
-     a modern color space with alpha against them from a near-black instead. */
+  /* A contribution-graph day with no commits: the foreground (oklch 96%) at
+     3%. */
   --color-graph-empty: rgb(242 242 242 / 0.03);
-  --animate-commit: commit 900ms ease-out both;
-
-  @keyframes commit {
-    from {
-      fill: var(--color-graph-empty);
-    }
-  }
 }
 
 /* Dark-only site, so the palette lives on `:root` with no light counterpart. */
