@@ -100,7 +100,9 @@ function Graph({
       className={cn(
         // Fades out toward the content, so the graph frames it rather than
         // competing with it. The mask flips along with a mirrored graph.
-        "absolute top-0 h-full w-[28rem] mask-l-from-40% mask-l-to-100%",
+        // Sized against `--page-zoom` (see `lib/page-zoom.ts`), so zooming
+        // the page leaves the graphs the same size on screen.
+        "absolute top-0 h-full w-[calc(28rem/var(--page-zoom,1))] mask-l-from-40% mask-l-to-100%",
         mirrored && "-scale-x-100",
         className,
       )}
@@ -132,8 +134,8 @@ export function ContributionDecor() {
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 hidden overflow-hidden select-none lg:block"
     >
-      <Graph cells={LEFT_CELLS} mirrored className="-left-16" />
-      <Graph cells={RIGHT_CELLS} className="-right-16" />
+      <Graph cells={LEFT_CELLS} mirrored className="left-[calc(-4rem/var(--page-zoom,1))]" />
+      <Graph cells={RIGHT_CELLS} className="right-[calc(-4rem/var(--page-zoom,1))]" />
     </div>
   );
 }

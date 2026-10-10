@@ -90,6 +90,11 @@ html:not([data-reveal-ready]) [data-reveal] {
   }
   html {
     @apply font-sans;
+    /* Keeps the scrollbar's lane even when the page is short enough not to
+       scroll (zoomed far out, say). Without it the viewport widens by the
+       scrollbar the moment it goes, and the decor pinned to its right edge
+       jumps right by as much. */
+    scrollbar-gutter: stable;
   }
   /* Tailwind v4 dropped the pointer cursor from buttons; this restores it
      site-wide, as its upgrade guide suggests, so every button — ours and

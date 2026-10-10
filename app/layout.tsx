@@ -8,6 +8,7 @@ import { InteractionShell } from "@/components/interaction-shell";
 import { cn } from "@/lib/utils";
 import { dictionaries } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
+import { PAGE_ZOOM_SCRIPT } from "@/lib/page-zoom";
 import { REVEAL_GUARD_SCRIPT } from "@/lib/reveal-guard";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -80,11 +81,13 @@ export default async function RootLayout({
         geist.variable,
         sfPro.variable
       )}
-      // The reveal guard below sets an attribute here before React hydrates.
+      // The reveal guard below sets an attribute here before React hydrates,
+      // and the zoom script a style.
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: REVEAL_GUARD_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: PAGE_ZOOM_SCRIPT }} />
       </head>
       <body className="flex min-h-full flex-col">
         <ContributionDecor />
