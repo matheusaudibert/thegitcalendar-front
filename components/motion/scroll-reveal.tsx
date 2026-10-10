@@ -50,6 +50,9 @@ export function ScrollReveal({
   return (
     <motion.div
       ref={ref}
+      // Local patch: lets the reveal fail-safe show this if hydration never
+      // happens (see `lib/reveal-guard.ts`).
+      data-reveal=""
       initial={hidden}
       animate={inView ? shown : hidden}
       transition={{ duration, ease: EASE_OUT, delay }}

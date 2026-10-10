@@ -40,6 +40,16 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Reveal fail-safe (see `lib/reveal-guard.ts`): until the page's script has
+   opted in, elements that animate in are shown as they are, so a page whose
+   JavaScript never runs is never left blurred or invisible. `!important` is
+   what beats the hidden state the server writes into their inline styles. */
+html:not([data-reveal-ready]) [data-reveal] {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+
 @theme {
   /* A contribution-graph day with no commits: the foreground (oklch 96%) at
      3%. */

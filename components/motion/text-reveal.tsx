@@ -99,6 +99,9 @@ export function TextReveal({
           return (
             <motion.span
               key={unitKey}
+              // Local patch: lets the reveal fail-safe show this if hydration
+              // never happens (see `lib/reveal-guard.ts`).
+              data-reveal=""
               initial={initial}
               animate={animate}
               transition={transition}

@@ -45,6 +45,7 @@ export function HeroTitle({ title }: { title: string }) {
     >
       <motion.span
         aria-hidden
+        data-reveal=""
         className="ml-[0.18em] inline-block will-change-transform"
         initial={
           reduce

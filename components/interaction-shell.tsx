@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 
+import { markHydrated } from "@/lib/reveal-guard";
 import { playTap, preloadTaps } from "@/lib/snd";
 
 /** What counts as hoverable: the same controls that get a pointer cursor. */
@@ -87,6 +88,7 @@ function useClickTaps() {
  */
 export function InteractionShell({ children }: { children: ReactNode }) {
   useEffect(() => {
+    markHydrated();
     preloadTaps();
   }, []);
   useHoverTaps();

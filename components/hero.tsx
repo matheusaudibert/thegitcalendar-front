@@ -5,7 +5,7 @@ import { WizardProvider } from "@/components/wizard-provider";
 import type { Dictionary, Locale } from "@/lib/i18n";
 
 const AUTHOR_AVATAR_URL = "https://avatars.githubusercontent.com/u/85813476?v=4";
-const AUTHOR_TWITTER_URL = "https://x.com/audibertdev";
+const AUTHOR_INSTAGRAM_URL = "https://instagram.com/audibert.dev";
 
 export function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
   // Height comes from the content, never from the viewport. A `min-h-svh` here
@@ -22,8 +22,8 @@ export function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
         <WizardProvider>
           {/* The text column gets the wider share so the oversized title can
               break into two lines without crowding the phone. */}
-          <div className="grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr] md:gap-16">
-            <div className="flex flex-col items-center text-center md:items-start md:text-left">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="mb-6 flex items-center gap-2.5">
                 {/* Decorative: the adjacent text already names the author, so an
                     alt here would just be announced twice. */}
@@ -38,7 +38,7 @@ export function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
                 <p className="text-sm text-muted-foreground">
                   {t.builtBy}{" "}
                   <a
-                    href={AUTHOR_TWITTER_URL}
+                    href={AUTHOR_INSTAGRAM_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded font-medium text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
@@ -57,7 +57,7 @@ export function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
               <HeroActions t={t} />
             </div>
 
-            <div className="flex justify-center md:justify-end">
+            <div className="flex justify-center lg:justify-end">
               <HeroPhone t={t} locale={locale} />
             </div>
           </div>
