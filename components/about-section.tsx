@@ -1,5 +1,6 @@
 import type { Dictionary } from "@/lib/i18n";
 import { renderRichText } from "@/lib/rich-text";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 
 export function AboutSection({ t }: { t: Dictionary }) {
   // Widened from the tuple of string literals so `.map` sees one array type
@@ -10,7 +11,7 @@ export function AboutSection({ t }: { t: Dictionary }) {
     /* Vertical rhythm lives on the wrapper in `app/page.tsx` so all three
        sections share one gap. */
     <section className="px-6">
-      <div className="mx-auto w-full max-w-4xl">
+      <ScrollReveal className="mx-auto w-full max-w-4xl">
         {/* animations.dev keeps section headings at medium weight rather than
             bold — the size carries the hierarchy, not the weight. */}
         <h2 className="text-2xl font-medium tracking-[-0.02em] text-foreground sm:text-3xl">
@@ -29,7 +30,7 @@ export function AboutSection({ t }: { t: Dictionary }) {
             </p>
           ))}
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

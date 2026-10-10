@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored beUI source, copied from the registry as-is. It trips the
+    // React Compiler rules, and patching it would make updates harder.
+    "components/motion/**",
   ]),
 ]);
 

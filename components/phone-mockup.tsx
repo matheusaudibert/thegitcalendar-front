@@ -6,6 +6,8 @@ type PhoneMockupProps = {
   imageUrl: string;
   alt: string;
   locale: Locale;
+  /** Whether the wallpaper is light, so the clock drawn over it turns dark. */
+  lightWallpaper?: boolean;
   className?: string;
 };
 
@@ -18,6 +20,7 @@ export function PhoneMockup({
   imageUrl,
   alt,
   locale,
+  lightWallpaper = false,
   className,
 }: PhoneMockupProps) {
   return (
@@ -37,7 +40,7 @@ export function PhoneMockup({
               alt={alt}
               className="h-full w-full object-cover"
             />
-            <LockScreenClock locale={locale} />
+            <LockScreenClock locale={locale} onLightWallpaper={lightWallpaper} />
           </div>
         </div>
       </div>

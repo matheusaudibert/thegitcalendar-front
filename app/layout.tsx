@@ -3,6 +3,8 @@ import { Geist } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
+import { ContributionDecor } from "@/components/contribution-decor";
+import { InteractionShell } from "@/components/interaction-shell";
 import { cn } from "@/lib/utils";
 import { dictionaries } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
@@ -68,8 +70,8 @@ export default async function RootLayout({
 
   return (
     // Dark-only site, so the `dark` class is fixed rather than toggled. The
-    // palette itself lives on `:root`; the class is here so that any shadcn
-    // component added later that ships `dark:` styles picks them up.
+    // palette lives on `:root`; the class is here so beUI's `dark:` styles
+    // apply.
     <html
       lang={locale}
       className={cn(
@@ -78,7 +80,10 @@ export default async function RootLayout({
         sfPro.variable
       )}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ContributionDecor />
+        <InteractionShell>{children}</InteractionShell>
+      </body>
     </html>
   );
 }

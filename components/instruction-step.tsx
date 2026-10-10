@@ -1,7 +1,11 @@
 "use client";
 
-import { TriangleAlert } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Alert,
+  AlertContent,
+  AlertDescription,
+  AlertIcon,
+} from "@/components/motion/alert";
 import { StepShell } from "@/components/step-shell";
 import { UrlLine } from "@/components/url-line";
 import { URL_TOKEN, type InstructionStep } from "@/lib/instructions";
@@ -49,7 +53,7 @@ export function InstructionStepView({
         {step.actions?.map((action) => (
           <div
             key={action.number}
-            className="rounded-lg border border-border p-3"
+            className="rounded-xl border border-border bg-background/40 p-3"
           >
             <p className="text-sm font-medium text-foreground">
               <span className="text-muted-foreground">{action.number}</span>{" "}
@@ -59,14 +63,17 @@ export function InstructionStepView({
               {action.details.map((line, i) => renderLine(line, t, imageUrl, i))}
             </div>
             {action.note && (
-              <Alert variant="warning" className="mt-2">
-                <TriangleAlert />
-                {/* Bold inside a note keeps the alert's amber rather than the
-                    white `renderRichText` gives it elsewhere. A descendant
-                    selector outranks the class on the `<strong>` itself. */}
-                <AlertDescription className="[&_strong]:text-current">
-                  {renderRichText(action.note)}
-                </AlertDescription>
+              <Alert variant="warning" className="mt-2 p-3">
+                <AlertIcon />
+                <AlertContent>
+                  {/* Bold inside a note keeps the alert's amber rather than
+                      the foreground `renderRichText` gives it elsewhere. A
+                      descendant selector outranks the class on the `<strong>`
+                      itself. */}
+                  <AlertDescription className="text-current [&_strong]:text-current">
+                    {renderRichText(action.note)}
+                  </AlertDescription>
+                </AlertContent>
               </Alert>
             )}
           </div>

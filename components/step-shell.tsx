@@ -26,7 +26,7 @@ export function StepShell({
       )}
     >
       <div className="flex flex-col items-center">
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary ring-1 ring-primary/30">
           {number}
         </div>
         {!isLast && <div className="mt-2 w-px flex-1 bg-border" />}

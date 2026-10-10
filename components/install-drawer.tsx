@@ -1,23 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { BottomSheet } from "@/components/motion/bottom-sheet";
+import { Button } from "@/components/motion/button/base";
 import { CustomizationStep } from "@/components/customization-step";
 import { DeviceStep } from "@/components/device-step";
 import { InstructionStepView } from "@/components/instruction-step";
 import { StepShell } from "@/components/step-shell";
-import { UsernameStep } from "@/components/username-step";
-import { useGithubUser } from "@/hooks/use-github-user";
-import { useWizardState, type Platform } from "@/hooks/use-wizard-state";
+import { useWizard } from "@/components/wizard-provider";
+import type { Platform } from "@/hooks/use-wizard-state";
 import { buildImageUrl } from "@/lib/build-image-url";
 import type { Dictionary } from "@/lib/i18n";
 import { getInstructions } from "@/lib/instructions";
@@ -34,8 +26,7 @@ type InstallDrawerProps = {
 };
 
 export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
-  const [state, dispatch] = useWizardState();
-  const githubUser = useGithubUser(state.username);
+  const { state, dispatch } = useWizard();
 
   // `platform` doubles as the open flag, so it drops to null the moment the
   // drawer starts closing. Retaining the last one keeps the right content on
@@ -50,8 +41,9 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
   const device =
     state.devicePlatform === openPlatform ? state.device : null;
 
-  const usernameValid = githubUser.status === "valid";
-  const deviceChosen = usernameValid && device !== null;
+  // The hero only opens the drawer once the username is valid, so the flow
+  // here starts at the device.
+  const deviceChosen = device !== null;
 
   const imageUrl = useMemo(
     () =>
@@ -73,105 +65,87 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
 
   const w = t.wizard;
 
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) onClose();
+    },
+    [onClose]
+  );
+
   return (
-    <Drawer
+    <BottomSheet
       open={platform !== null}
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
-      showSwipeHandle
+      onOpenChange={handleOpenChange}
+      snapPoints={[0.95]}
+      title={
+        openPlatform === "apple" ? w.drawerTitleApple : w.drawerTitleAndroid
+      }
+      description={
+        openPlatform === "apple"
+          ? w.drawerDescriptionApple
+          : w.drawerDescriptionAndroid
+      }
+      className="w-[calc(100%-1.5rem)] max-w-[650px] bg-card sm:w-full"
     >
-      <DrawerContent className="mx-auto h-[95vh]! max-h-[95vh]! w-[calc(100%-1.5rem)] max-w-[650px]! sm:w-full">
-        <DrawerHeader>
-          <DrawerTitle>
-            {openPlatform === "apple"
-              ? w.drawerTitleApple
-              : w.drawerTitleAndroid}
-          </DrawerTitle>
-          <DrawerDescription>
-            {openPlatform === "apple"
-              ? w.drawerDescriptionApple
-              : w.drawerDescriptionAndroid}
-          </DrawerDescription>
-        </DrawerHeader>
+      <div className="pt-4 pb-8">
+        <StepShell
+          number={1}
+          title={w.deviceTitle}
+          description={w.deviceDescription}
+          isLast={!deviceChosen}
+        >
+          <DeviceStep
+            t={t}
+            platform={openPlatform}
+            value={device}
+            onChange={(value) =>
+              dispatch({ type: "SET_DEVICE", value, platform: openPlatform })
+            }
+          />
+        </StepShell>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-8 sm:px-6">
-          <StepShell
-            number={1}
-            title={w.usernameTitle}
-            description={w.usernameDescription}
-            isLast={!usernameValid}
-          >
-            <UsernameStep
-              t={t}
-              value={state.username}
-              onChange={(value) => dispatch({ type: "SET_USERNAME", value })}
-              status={githubUser.status}
-              avatarUrl={githubUser.avatarUrl}
-            />
-          </StepShell>
-
-          {usernameValid && (
+        {deviceChosen && (
+          <>
             <StepShell
               number={2}
-              title={w.deviceTitle}
-              description={w.deviceDescription}
-              isLast={!deviceChosen}
+              title={w.customizeTitle}
+              description={w.customizeDescription}
             >
-              <DeviceStep
+              <CustomizationStep
                 t={t}
-                platform={openPlatform}
-                value={device}
-                onChange={(value) =>
-                  dispatch({ type: "SET_DEVICE", value, platform: openPlatform })
+                background={state.background}
+                color={state.color}
+                shape={state.shape}
+                onBackgroundChange={(value) =>
+                  dispatch({ type: "SET_BACKGROUND", value })
+                }
+                onColorChange={(value) =>
+                  dispatch({ type: "SET_COLOR", value })
+                }
+                onShapeChange={(value) =>
+                  dispatch({ type: "SET_SHAPE", value })
                 }
               />
             </StepShell>
-          )}
 
-          {deviceChosen && (
-            <>
-              <StepShell
-                number={3}
-                title={w.customizeTitle}
-                description={w.customizeDescription}
-              >
-                <CustomizationStep
-                  t={t}
-                  background={state.background}
-                  color={state.color}
-                  shape={state.shape}
-                  onBackgroundChange={(value) =>
-                    dispatch({ type: "SET_BACKGROUND", value })
-                  }
-                  onColorChange={(value) =>
-                    dispatch({ type: "SET_COLOR", value })
-                  }
-                  onShapeChange={(value) =>
-                    dispatch({ type: "SET_SHAPE", value })
-                  }
-                />
-              </StepShell>
+            {instructions.map((step, i) => (
+              <InstructionStepView
+                key={step.number}
+                t={t}
+                step={step}
+                imageUrl={imageUrl}
+                isLast={i === instructions.length - 1}
+              />
+            ))}
+          </>
+        )}
 
-              {instructions.map((step, i) => (
-                <InstructionStepView
-                  key={step.number}
-                  t={t}
-                  step={step}
-                  imageUrl={imageUrl}
-                  isLast={i === instructions.length - 1}
-                />
-              ))}
-            </>
-          )}
-
-          <div className="mt-8 flex justify-center">
-            <DrawerClose render={<Button variant="outline" />}>
-              {w.close}
-            </DrawerClose>
-          </div>
+        <div className="mt-8 flex justify-center">
+          <Button variant="outline" onClick={onClose}>
+            {w.close}
+          </Button>
         </div>
-      </DrawerContent>
-    </Drawer>
+      </div>
+    </BottomSheet>
   );
 }

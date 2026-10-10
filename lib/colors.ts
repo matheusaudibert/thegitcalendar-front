@@ -18,6 +18,11 @@ export const COLOR_OPTIONS: { value: ColorName; swatch: string }[] = [
   { value: "black", swatch: "#000000" },
 ];
 
+/** Backgrounds light enough that white text drawn over them disappears. */
+export function isLightBackground(background: Background) {
+  return background === "light";
+}
+
 /** Same source: the `BACKGROUND_THEMES` presets the `background` param selects. */
 export const BACKGROUND_OPTIONS: { value: Background; swatch: string }[] = [
   { value: "github", swatch: "#0d1117" },

@@ -1,68 +1,62 @@
 "use client";
 
-import { useState } from "react";
-import { FaAndroid, FaApple, FaSteam } from "react-icons/fa6";
+import { useCallback, useState } from "react";
+import { FaAndroid, FaApple } from "react-icons/fa6";
 
+import { Button } from "@/components/motion/button/base";
 import { InstallDrawer } from "@/components/install-drawer";
-import { BrandButton } from "@/components/ui/brand-button";
+import { UsernameField } from "@/components/username-field";
+import { useWizard } from "@/components/wizard-provider";
 import type { Platform } from "@/hooks/use-wizard-state";
 import type { Dictionary } from "@/lib/i18n";
 
 /**
- * The hero's CTA row. Split out of `hero.tsx` so the rest of the hero — and
- * the phone mockup it renders — stays a server component.
+ * The hero's interactive column: the username field and the install buttons.
+ * The drawer only opens once the username is valid, so it can start straight
+ * at the device step; until then the buttons send the visitor to the field.
  */
-export function InstallButtons({ t }: { t: Dictionary }) {
+export function HeroActions({ t }: { t: Dictionary }) {
+  const { githubUser, requestUsername } = useWizard();
   const [platform, setPlatform] = useState<Platform | null>(null);
+  // Stable, because the bottom sheet re-arms its scroll lock whenever this
+  // callback's identity changes.
+  const handleClose = useCallback(() => setPlatform(null), []);
+
+  const open = (next: Platform) => {
+    if (githubUser.status === "valid") setPlatform(next);
+    else requestUsername();
+  };
 
   return (
     <div className="mt-10 flex w-full max-w-[440px] flex-col gap-3">
+      <UsernameField t={t} />
+
       {/* Wraps to one button per row when the column gets too narrow. */}
       <div className="flex flex-wrap gap-3">
         <div className="min-w-[204px] flex-1">
-          <BrandButton
-            variant="apple"
-            className="whitespace-nowrap"
-            onClick={() => setPlatform("apple")}
+          <Button
+            size="lg"
+            className="w-full whitespace-nowrap"
+            onClick={() => open("apple")}
           >
             <FaApple className="size-[1.15em]" />
             {t.installIos}
-          </BrandButton>
+          </Button>
         </div>
 
         <div className="min-w-[204px] flex-1">
-          <BrandButton
-            variant="android"
-            className="whitespace-nowrap"
-            onClick={() => setPlatform("android")}
+          <Button
+            size="lg"
+            className="w-full whitespace-nowrap"
+            onClick={() => open("android")}
           >
             <FaAndroid className="size-[1.15em]" />
             {t.installAndroid}
-          </BrandButton>
+          </Button>
         </div>
       </div>
 
-      <BrandButton
-        variant="neutral"
-        disabled
-        aria-describedby="desktop-soon"
-        className="whitespace-nowrap"
-      >
-        <FaSteam className="size-[1.15em]" />
-        {t.installDesktop}
-        <span
-          id="desktop-soon"
-          className="ml-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-muted-foreground uppercase [text-shadow:none]"
-        >
-          {t.soon}
-        </span>
-      </BrandButton>
-
-      <InstallDrawer
-        t={t}
-        platform={platform}
-        onClose={() => setPlatform(null)}
-      />
+      <InstallDrawer t={t} platform={platform} onClose={handleClose} />
     </div>
   );
 }

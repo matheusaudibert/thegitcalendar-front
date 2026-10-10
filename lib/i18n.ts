@@ -4,11 +4,15 @@ export type Locale = (typeof LOCALES)[number];
 
 export const DEFAULT_LOCALE: Locale = "en";
 
-/** Name of the header the middleware uses to hand the resolved locale to the app. */
-export const LOCALE_HEADER = "x-locale";
-
-/** Name of the cookie that remembers an explicit `?lang=` choice. */
-export const LOCALE_COOKIE = "locale";
+/**
+ * The full BCP 47 tag `Intl` formats each locale with. `en-US` rather than
+ * `en-GB` because CLDR abbreviates September as "Sept" for en-GB, while iOS
+ * (which the lock-screen clock imitates) shows "Sep".
+ */
+export const INTL_LOCALES: Record<Locale, string> = {
+  en: "en-US",
+  pt: "pt-BR",
+};
 
 export function isLocale(value: unknown): value is Locale {
   return LOCALES.includes(value as Locale);
@@ -47,6 +51,8 @@ export function parseAcceptLanguage(header: string | null | undefined): Locale {
 
 /** URLs written inline in `answer` are turned into links at render time. */
 export type FaqItem = {
+  /** Stable across locales; `components/faq-section.tsx` keys icons by it. */
+  readonly id: string;
   readonly question: string;
   readonly answer: string;
 };
@@ -70,36 +76,67 @@ export const dictionaries = {
       "Turn your GitHub contribution graph into a wallpaper that updates itself every day.",
     installIos: "Install on iOS",
     installAndroid: "Install on Android",
-    installDesktop: "Install on Desktop",
-    soon: "Soon",
     wallpaperAlt: "GitHub contribution graph as an iPhone wallpaper",
+    howTitle: "How it works",
+    /** Keyed by the step ids in `components/how-it-works-section.tsx`. */
+    howSteps: {
+      copy: {
+        title: "Copy your wallpaper URL",
+        description:
+          "Pick your colors and style, and copy the link to your personal image.",
+      },
+      automate: {
+        title: "Set up the automation",
+        description:
+          "Create a Shortcuts automation on iPhone, or a MacroDroid macro on Android. It takes a couple of minutes.",
+      },
+      daily: {
+        title: "Fresh every day",
+        description:
+          "Your wallpaper updates itself with your latest contributions — nothing else to do.",
+      },
+    },
     aboutTitle: "About the project",
+    visitsLabel: "Visits",
+    notFoundTitle: "Page not found",
+    notFoundDescription:
+      "The page you're looking for doesn't exist or has moved.",
+    notFoundHome: "Back to home",
     aboutParagraphs: [
-      "Hey, I'm **Matheus Audibert**, a software engineer at Itaú Unibanco. I built this project in a few hours, during a productive late night. The idea was simple: **I wanted to see my GitHub contribution graph on my wallpaper every day**. What I did not expect was for it to **go viral**, much less to find out that plenty of other devs wanted exactly the same thing.",
+      "Hey, I'm **Matheus Audibert**, a software engineer. I built this project in a few hours, during a productive late night. The idea was simple: **I wanted to see my GitHub contribution graph on my wallpaper every day**. What I did not expect was for it to **go viral**, much less to find out that plenty of other devs wanted exactly the same thing.",
       "It's really cool to see something that started as a personal idea being used by so many people. **Thank you** to everyone using, sharing and supporting the project!"
     ],
-    testimonialQuote: "A wallpaper that updates your commits daily 🤯🤯🤯",
+    /** Keyed by the testimonial ids in `components/testimonial.tsx`. */
+    testimonialQuotes: {
+      samuelrizzon: "A wallpaper that updates your commits daily 🤯🤯🤯",
+      devcelio:
+        "And this wallpaper my buddy @audibertdev launched turned out really beautiful",
+    },
     faqTitle: "FAQ",
     faq: [
       {
+        id: "customize",
         question: "Can I customize the wallpaper?",
         answer:
-          "Yes, you can customize the wallpaper. You can change the color and the shape of the contributions, as well as the background color of the image.",
+          "Yes. You can choose the color and shape of the contribution squares, as well as the background color of the image.",
       },
       {
-        question: "Does the wallpaper count private contributions?",
+        id: "private",
+        question: "Does the wallpaper include private contributions?",
         answer:
-          "No, the wallpaper does not count private contributions. For them to show up, you have to enable them in your GitHub account. For more information, [**see this article**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
+          "Only if your GitHub profile shows them. By default, GitHub displays public contributions only. To include private ones, enable private contributions in your profile settings. [**Learn how in GitHub's docs**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
       },
       {
+        id: "devices",
         question: "Does the project support every phone?",
         answer:
-          "Not yet. I'm working on supporting as many iPhone and Android models as possible.",
+          "Not yet. Support for new iPhone and Android models is added continuously, with the goal of covering as many devices as possible.",
       },
       {
+        id: "how",
         question: "How does this project work?",
         answer:
-          'Basically, I built an API that returns an image formatted for a phone screen, showing a user\'s contribution graph. You set your phone to make a GET request to that API and use the result as your wallpaper. On iPhone this is done natively through "Shortcuts" automations. Android has no native equivalent, so you need the "MacroDroid" app to create the automation.',
+          "The project is built on an API that generates an image sized for your phone's screen, showing your GitHub contribution graph. An automation on your phone sends a `GET` request to that API every day and sets the image it returns as your wallpaper. On iPhone, this runs natively through the [Shortcuts](https://apps.apple.com/app/id915249334) app's automations. Android has no built-in equivalent, so the automation is created with the [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) app.",
       },
     ],
     wizard: {
@@ -111,11 +148,12 @@ export const dictionaries = {
         "Set up a MacroDroid macro that refreshes your wallpaper every day.",
 
       usernameTitle: "GitHub username",
-      usernameDescription:
-        "Enter the GitHub username whose contributions you want on your wallpaper.",
       usernamePlaceholder: "your-github-username",
+      usernameRequired: "Enter your GitHub username to continue.",
       usernameNotFound:
         "We couldn't find a GitHub user with that username. Double-check the spelling and try again.",
+      usernameMalformed:
+        "GitHub usernames only contain letters, numbers and hyphens, up to 39 characters.",
       usernameRateLimited:
         "GitHub is rate-limiting this browser, so we can't check the username right now. Wait a few minutes and try again.",
 
@@ -131,6 +169,7 @@ export const dictionaries = {
       commitColor: "Commit Color",
       commitShape: "Commit Shape",
       backgroundColor: "Background Color",
+
 
       copy: "Copy",
       copied: "Copied!",
@@ -201,43 +240,72 @@ export const dictionaries = {
     },
   },
   pt: {
-    title: "The Git Calendar",
+    title: "Calendário Git",
     subtitle: "Mostre suas contribuições do GitHub na tela do seu celular.",
     builtBy: "Feito por",
     metaDescription:
       "Transforme seu gráfico de contribuições do GitHub em um wallpaper que se atualiza todo dia.",
     installIos: "Instalar no iOS",
     installAndroid: "Instalar no Android",
-    installDesktop: "Instalar no Desktop",
-    soon: "Em breve",
     wallpaperAlt: "Gráfico de contribuições do GitHub como wallpaper de iPhone",
+    howTitle: "Como funciona",
+    howSteps: {
+      copy: {
+        title: "Copie a URL do seu wallpaper",
+        description:
+          "Escolha as cores e o estilo, e copie o link da sua imagem personalizada.",
+      },
+      automate: {
+        title: "Crie a automação",
+        description:
+          "Configure uma automação no Atalhos do iPhone ou uma macro no MacroDroid do Android. Leva só alguns minutos.",
+      },
+      daily: {
+        title: "Atualizado todo dia",
+        description:
+          "Seu wallpaper se atualiza sozinho com suas contribuições mais recentes, sem você precisar fazer mais nada.",
+      },
+    },
     aboutTitle: "Sobre o projeto",
+    visitsLabel: "Visitas",
+    notFoundTitle: "Página não encontrada",
+    notFoundDescription:
+      "A página que você procura não existe ou foi movida.",
+    notFoundHome: "Voltar ao início",
     aboutParagraphs: [
-      "Olá, eu sou **Matheus Audibert**, engenheiro de software no Itaú Unibanco. Criei este projeto em algumas horas, durante uma madrugada produtiva. A ideia era simples: **eu queria ver meu gráfico de contribuições do GitHub todos os dias no meu wallpaper**. O que eu não esperava era que o projeto **viralizasse**, e muito menos descobrir que vários outros devs também queriam exatamente a mesma coisa.",
+      "Olá, eu sou **Matheus Audibert**, um engenheiro de software. Criei este projeto em algumas horas, durante uma madrugada produtiva. A ideia era simples: **eu queria ver meu gráfico de contribuições do GitHub todos os dias no meu wallpaper**. O que eu não esperava era que o projeto **viralizasse**, e muito menos descobrir que vários outros devs também queriam exatamente a mesma coisa.",
       "É muito legal ver algo que começou como uma ideia pessoal sendo usado por tanta gente. **Obrigado** a todos que estão usando, compartilhando e apoiando o projeto!"
     ],
-    testimonialQuote: "Wallpaper que atualiza os commits diariamente 🤯🤯🤯",
+    testimonialQuotes: {
+      samuelrizzon: "Wallpaper que atualiza os commits diariamente 🤯🤯🤯",
+      devcelio:
+        "E esse wallpaper que o mano @audibertdev lançou, ficou muito lindo",
+    },
     faqTitle: "FAQ",
     faq: [
       {
+        id: "customize",
         question: "Posso personalizar o wallpaper?",
         answer:
-          "Sim, você pode personalizar o wallpaper. Você pode editar a cor e o formato das contribuições e a cor do fundo da imagem.",
+          "Sim. Você pode escolher a cor e o formato dos quadrados de contribuição, além da cor de fundo da imagem.",
       },
       {
-        question: "O wallpaper conta as contribuições privadas?",
+        id: "private",
+        question: "O wallpaper inclui contribuições privadas?",
         answer:
-          "Não, o wallpaper não conta as contribuições privadas. Para elas aparecerem você deve habilitá-las em sua conta do GitHub. Para mais informações [**acesse esse artigo**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
+          "Somente se o seu perfil do GitHub as exibir. Por padrão, o GitHub mostra apenas as contribuições públicas. Para incluir as privadas, ative a exibição de contribuições privadas nas configurações do seu perfil. [**Veja como na documentação do GitHub**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
       },
       {
-        question: "O projeto contém todos os celulares?",
+        id: "devices",
+        question: "O projeto é compatível com todos os celulares?",
         answer:
-          "Ainda não, estou trabalhando para desenvolver o suporte para todos os iPhones e Androids possíveis.",
+          "Ainda não. O suporte a novos modelos de iPhone e Android é adicionado continuamente, com o objetivo de cobrir o maior número possível de aparelhos.",
       },
       {
-        question: "Como esse projeto funciona?",
+        id: "how",
+        question: "Como o projeto funciona?",
         answer:
-          'Basicamente, desenvolvi uma API que retorna uma imagem formatada para celular, com o gráfico de contribuições de um usuário. O usuário define para o celular dele fazer um GET nessa API e definir como plano de fundo. No iPhone isso é feito de maneira nativa usando as automações do "Atalhos". O Android não tem essa funcionalidade de forma nativa, portanto é necessário baixar o aplicativo "MacroDroid" para criar uma automação.',
+          "O projeto é baseado em uma API que gera uma imagem no tamanho da tela do seu celular, com o seu gráfico de contribuições do GitHub. Uma automação no celular faz uma requisição `GET` a essa API todos os dias e define a imagem retornada como plano de fundo. No iPhone, isso é feito de forma nativa pelas automações do app [Atalhos](https://apps.apple.com/app/id915249334). O Android não oferece um recurso equivalente, então a automação é criada com o app [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid).",
       },
     ],
     wizard: {
@@ -249,11 +317,12 @@ export const dictionaries = {
         "Configure uma macro no MacroDroid que atualiza seu wallpaper todo dia.",
 
       usernameTitle: "Usuário do GitHub",
-      usernameDescription:
-        "Digite o usuário do GitHub cujas contribuições você quer no wallpaper.",
       usernamePlaceholder: "seu-usuario-do-github",
+      usernameRequired: "Digite seu usuário do GitHub para continuar.",
       usernameNotFound:
         "Não encontramos nenhum usuário do GitHub com esse nome. Confira a grafia e tente de novo.",
+      usernameMalformed:
+        "Usuários do GitHub só têm letras, números e hífens, com até 39 caracteres.",
       usernameRateLimited:
         "O GitHub limitou as requisições deste navegador, então não dá para verificar o usuário agora. Espere alguns minutos e tente de novo.",
 
@@ -269,6 +338,7 @@ export const dictionaries = {
       commitColor: "Cor das contribuições",
       commitShape: "Formato das contribuições",
       backgroundColor: "Cor de fundo",
+
 
       copy: "Copiar",
       copied: "Copiado!",

@@ -1,13 +1,13 @@
 "use client";
 
-import { CheckIcon } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import type { ReactNode } from "react";
 import {
-  Field,
-  FieldContent,
-  FieldLabel,
-  FieldTitle,
-} from "@/components/ui/field";
+  ColorSelector,
+  ColorSelectorItem,
+  ColorSelectorLabel,
+  ColorSelectorList,
+} from "@/components/motion/color-selector";
+import { RadioGroup, RadioGroupItem } from "@/components/motion/radio";
 import { cn } from "@/lib/utils";
 import {
   BACKGROUND_OPTIONS,
@@ -27,8 +27,43 @@ type CustomizationStepProps = {
   onShapeChange: (value: Shape) => void;
 };
 
-/** Swatches light enough that a white tick would disappear into them. */
-const LIGHT_SWATCHES: ColorName[] = ["white", "yellow", "orange", "pink"];
+/**
+ * One bordered card per option. beUI's radio renders its own `<label>`, so
+ * the preview sits in a sibling label pointed at the same control rather than
+ * inside it — clicking anywhere on the card still selects it.
+ */
+function OptionCard({
+  id,
+  value,
+  selected,
+  children,
+}: {
+  id: string;
+  value: string;
+  selected: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-3 rounded-xl border bg-card px-3 py-2.5 transition-colors",
+        selected ? "border-primary/60" : "border-border hover:border-border-strong"
+      )}
+    >
+      <RadioGroupItem id={id} value={value} />
+      <label
+        htmlFor={id}
+        className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-sm text-foreground select-none"
+      >
+        {children}
+      </label>
+    </div>
+  );
+}
+
+function SectionLabel({ children }: { children: ReactNode }) {
+  return <p className="mb-2 text-sm font-medium text-foreground">{children}</p>;
+}
 
 export function CustomizationStep({
   t,
@@ -40,105 +75,82 @@ export function CustomizationStep({
   onShapeChange,
 }: CustomizationStepProps) {
   const w = t.wizard;
+  // The shape previews are drawn in the commit colour picked above, so the
+  // two choices read as one preview of the wallpaper's squares.
+  const commitSwatch =
+    COLOR_OPTIONS.find((option) => option.value === color)?.swatch;
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="mb-2 text-sm font-medium text-foreground">
+      <ColorSelector
+        value={color}
+        onValueChange={(value) => onColorChange(value as ColorName)}
+      >
+        <ColorSelectorLabel className="mb-2 text-foreground">
           {w.commitColor}
-        </p>
-        <div className="grid grid-cols-5 gap-2 sm:grid-cols-9">
-          {COLOR_OPTIONS.map((option) => {
-            const selected = option.value === color;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => onColorChange(option.value)}
-                aria-label={w.colors[option.value]}
-                aria-pressed={selected}
-                className={cn(
-                  "relative flex size-9 items-center justify-center rounded-full ring-1 ring-border transition-transform hover:scale-105",
-                  selected &&
-                    "ring-2 ring-primary ring-offset-2 ring-offset-background"
-                )}
-                style={{ backgroundColor: option.swatch }}
-              >
-                {selected && (
-                  <CheckIcon
-                    className={cn(
-                      "size-4",
-                      LIGHT_SWATCHES.includes(option.value)
-                        ? "text-black"
-                        : "text-white"
-                    )}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+        </ColorSelectorLabel>
+        <ColorSelectorList className="gap-2.5">
+          {COLOR_OPTIONS.map((option) => (
+            <ColorSelectorItem
+              key={option.value}
+              value={option.value}
+              color={option.swatch}
+              label={w.colors[option.value]}
+              className="size-10"
+            />
+          ))}
+        </ColorSelectorList>
+      </ColorSelector>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-foreground">
-          {w.commitShape}
-        </p>
+        <SectionLabel>{w.commitShape}</SectionLabel>
         <RadioGroup
           value={shape}
           onValueChange={(value) => onShapeChange(value as Shape)}
           className="grid grid-cols-1 gap-2 sm:grid-cols-3"
         >
           {SHAPE_OPTIONS.map((option) => (
-            <FieldLabel key={option.value} htmlFor={`shape-${option.value}`}>
-              <Field orientation="horizontal" className="gap-2">
-                <RadioGroupItem
-                  id={`shape-${option.value}`}
-                  value={option.value}
-                />
-                <FieldContent className="flex-row items-center gap-2">
-                  <span
-                    className={cn(
-                      "size-4 shrink-0 bg-foreground",
-                      option.radiusClass
-                    )}
-                  />
-                  <FieldTitle>{w.shapes[option.value]}</FieldTitle>
-                </FieldContent>
-              </Field>
-            </FieldLabel>
+            <OptionCard
+              key={option.value}
+              id={`shape-${option.value}`}
+              value={option.value}
+              selected={option.value === shape}
+            >
+              {/* The ring keeps white and black visible on either theme's
+                  card, the same way the background swatches below do. */}
+              <span
+                className={cn(
+                  "size-4 shrink-0 ring-1 ring-border-strong transition-colors duration-200",
+                  option.radiusClass
+                )}
+                style={{ backgroundColor: commitSwatch }}
+              />
+              {w.shapes[option.value]}
+            </OptionCard>
           ))}
         </RadioGroup>
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-foreground">
-          {w.backgroundColor}
-        </p>
+        <SectionLabel>{w.backgroundColor}</SectionLabel>
         <RadioGroup
           value={background}
           onValueChange={(value) => onBackgroundChange(value as Background)}
           className="grid grid-cols-1 gap-2 sm:grid-cols-3"
         >
           {BACKGROUND_OPTIONS.map((option) => (
-            <FieldLabel
+            <OptionCard
               key={option.value}
-              htmlFor={`background-${option.value}`}
+              id={`background-${option.value}`}
+              value={option.value}
+              selected={option.value === background}
             >
-              <Field orientation="horizontal" className="gap-2">
-                <RadioGroupItem
-                  id={`background-${option.value}`}
-                  value={option.value}
-                />
-                <FieldContent className="flex-row items-center gap-2">
-                  <span
-                    className="size-4 shrink-0 rounded-full ring-1 ring-border"
-                    style={{ backgroundColor: option.swatch }}
-                  />
-                  <FieldTitle>{w.backgrounds[option.value]}</FieldTitle>
-                </FieldContent>
-              </Field>
-            </FieldLabel>
+              <span
+                className="size-4 shrink-0 rounded-full ring-1 ring-border-strong"
+                style={{ backgroundColor: option.swatch }}
+              />
+              {w.backgrounds[option.value]}
+            </OptionCard>
           ))}
         </RadioGroup>
       </div>

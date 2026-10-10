@@ -30,10 +30,11 @@ export const MACRODROID_APP_URL =
 
 /**
  * Numbering runs continuously from the top of the wizard: the instructions are
- * its tail, not a section that restarts at 1. Steps 1–3 are username, device
- * and customisation, so these pick up at 4.
+ * its tail, not a section that restarts at 1. Steps 1–2 are device and
+ * customisation (the username is entered in the hero, before the drawer
+ * opens), so these pick up at 3.
  */
-const FIRST_INSTRUCTION_STEP = 4;
+const FIRST_INSTRUCTION_STEP = 3;
 
 /** A step before its position in the wizard is known. */
 type UnnumberedStep = Omit<InstructionStep, "number" | "actions"> & {

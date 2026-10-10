@@ -23,20 +23,25 @@ export type WizardState = {
   shape: Shape;
 };
 
-type WizardAction =
+export type WizardAction =
   | { type: "SET_USERNAME"; value: string }
   | { type: "SET_DEVICE"; value: Device; platform: Platform }
   | { type: "SET_BACKGROUND"; value: Background }
   | { type: "SET_COLOR"; value: ColorName }
   | { type: "SET_SHAPE"; value: Shape };
 
+/** The wallpaper style everyone starts on — also the pre-rendered showcase's. */
+export const DEFAULT_STYLE = {
+  background: "github",
+  color: "green",
+  shape: "rounded",
+} as const satisfies Pick<WizardState, "background" | "color" | "shape">;
+
 const initialState: WizardState = {
   username: "",
   device: null,
   devicePlatform: null,
-  background: "github",
-  color: "green",
-  shape: "rounded",
+  ...DEFAULT_STYLE,
 };
 
 function wizardReducer(state: WizardState, action: WizardAction): WizardState {
@@ -44,7 +49,11 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
     case "SET_USERNAME":
       return { ...state, username: action.value };
     case "SET_DEVICE":
-      return { ...state, device: action.value, devicePlatform: action.platform };
+      return {
+        ...state,
+        device: action.value,
+        devicePlatform: action.platform,
+      };
     case "SET_BACKGROUND":
       return { ...state, background: action.value };
     case "SET_COLOR":

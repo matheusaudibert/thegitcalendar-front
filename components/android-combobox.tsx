@@ -1,18 +1,15 @@
 "use client";
 
-import * as React from "react";
-import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
-import { useVirtualizer, type Virtualizer } from "@tanstack/react-virtual";
-import { Smartphone } from "lucide-react";
-import { InputGroupAddon } from "@/components/ui/input-group";
+import { useMemo, useState } from "react";
 import {
   Combobox,
-  ComboboxInput,
   ComboboxContent,
-  ComboboxList,
   ComboboxEmpty,
+  ComboboxInput,
   ComboboxItem,
-} from "@/components/ui/combobox";
+  ComboboxList,
+  ComboboxTrigger,
+} from "@/components/motion/combobox";
 import { ANDROID_DEVICES, type AndroidDevice, type Device } from "@/lib/devices";
 import type { Dictionary } from "@/lib/i18n";
 
@@ -22,114 +19,75 @@ type AndroidComboboxProps = {
   onChange: (device: AndroidDevice) => void;
 };
 
+/**
+ * beUI's combobox mounts every option it is given, and there are hundreds of
+ * Android devices. The query is held here instead and only the first matches
+ * are rendered — anyone looking for a specific phone types its name anyway.
+ */
+const MAX_RESULTS = 60;
+
+const BY_LABEL = new Map(ANDROID_DEVICES.map((device) => [device.label, device]));
+
+/** The filtering already happened above; the combobox should not redo it. */
+const passThrough = () => true;
+
 export function AndroidCombobox({ t, value, onChange }: AndroidComboboxProps) {
-  const virtualizerRef = React.useRef<Virtualizer<HTMLDivElement, Element> | null>(null);
+  const [query, setQuery] = useState("");
+
+  const results = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase();
+    if (needle) {
+      return ANDROID_DEVICES.filter((device) =>
+        `${device.brand} ${device.label}`.toLocaleLowerCase().includes(needle)
+      ).slice(0, MAX_RESULTS);
+    }
+
+    // With no query the field is either closed or just opened. Closed, the
+    // input reads its text from the selected option, so that option has to be
+    // among the mounted ones even when it sits past the first page.
+    const firstPage = ANDROID_DEVICES.slice(0, MAX_RESULTS);
+    const selected = value ? BY_LABEL.get(value.label) : undefined;
+    return selected && !firstPage.includes(selected)
+      ? [...firstPage, selected]
+      : firstPage;
+  }, [query, value]);
 
   return (
     <Combobox
-      items={ANDROID_DEVICES}
-      value={value as AndroidDevice | null}
-      onValueChange={(device) => {
-        if (device) onChange(device as AndroidDevice);
+      value={value?.label}
+      onValueChange={(label) => {
+        const device = BY_LABEL.get(label);
+        if (device) onChange(device);
       }}
-      itemToStringLabel={(device: AndroidDevice) => device.label}
-      isItemEqualToValue={(a: AndroidDevice, b: AndroidDevice) =>
-        a.label === b.label
-      }
-      virtualized
-      onItemHighlighted={(item, { reason, index }) => {
-        const virtualizer = virtualizerRef.current;
-        if (!item || !virtualizer) return;
-        const isStart = index === 0;
-        const isEnd = index === virtualizer.options.count - 1;
-        const shouldScroll =
-          reason === "none" || (reason === "keyboard" && (isStart || isEnd));
-        if (shouldScroll) {
-          queueMicrotask(() => {
-            virtualizer.scrollToIndex(index, { align: isEnd ? "start" : "end" });
-          });
-        }
-      }}
+      query={query}
+      onQueryChange={setQuery}
+      filter={passThrough}
     >
-      <ComboboxInput placeholder={t.wizard.androidPlaceholder}>
-        <InputGroupAddon align="inline-start">
-          <Smartphone className="text-muted-foreground" />
-        </InputGroupAddon>
-      </ComboboxInput>
-      <ComboboxContent>
-        <ComboboxEmpty>{t.wizard.deviceEmpty}</ComboboxEmpty>
-        <ComboboxList className="max-h-none overflow-visible p-0">
-          <VirtualizedDeviceList virtualizerRef={virtualizerRef} />
+      <ComboboxTrigger className="h-11 bg-card">
+        <ComboboxInput
+          placeholder={t.wizard.androidPlaceholder}
+          aria-label={t.wizard.androidPlaceholder}
+        />
+      </ComboboxTrigger>
+      <ComboboxContent className="bg-card">
+        <ComboboxList className="max-h-72">
+          {results.map((device) => (
+            <ComboboxItem
+              key={device.label}
+              value={device.label}
+              textValue={device.label}
+            >
+              <span className="flex min-w-0 items-center gap-2">
+                <span className="shrink-0 text-muted-foreground">
+                  {device.brand}
+                </span>
+                <span className="truncate text-foreground">{device.label}</span>
+              </span>
+            </ComboboxItem>
+          ))}
         </ComboboxList>
+        <ComboboxEmpty>{t.wizard.deviceEmpty}</ComboboxEmpty>
       </ComboboxContent>
     </Combobox>
-  );
-}
-
-function VirtualizedDeviceList({
-  virtualizerRef,
-}: {
-  virtualizerRef: React.RefObject<Virtualizer<HTMLDivElement, Element> | null>;
-}) {
-  const filteredItems = ComboboxPrimitive.useFilteredItems<AndroidDevice>();
-  const scrollElementRef = React.useRef<HTMLDivElement | null>(null);
-
-  const virtualizer = useVirtualizer({
-    count: filteredItems.length,
-    getScrollElement: () => scrollElementRef.current,
-    estimateSize: () => 36,
-    overscan: 20,
-    paddingStart: 4,
-    paddingEnd: 4,
-  });
-
-  React.useImperativeHandle(virtualizerRef, () => virtualizer);
-
-  const handleScrollElementRef = React.useCallback(
-    (element: HTMLDivElement | null) => {
-      scrollElementRef.current = element;
-      if (element) virtualizer.measure();
-    },
-    [virtualizer]
-  );
-
-  if (!filteredItems.length) return null;
-
-  const totalSize = virtualizer.getTotalSize();
-
-  return (
-    <div
-      role="presentation"
-      ref={handleScrollElementRef}
-      className="max-h-72 overflow-y-auto p-1"
-    >
-      <div role="presentation" className="relative w-full" style={{ height: totalSize }}>
-        {virtualizer.getVirtualItems().map((virtualItem) => {
-          const device = filteredItems[virtualItem.index];
-          if (!device) return null;
-          return (
-            <ComboboxItem
-              key={virtualItem.key}
-              index={virtualItem.index}
-              data-index={virtualItem.index}
-              ref={virtualizer.measureElement}
-              value={device}
-              aria-setsize={filteredItems.length}
-              aria-posinset={virtualItem.index + 1}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                transform: `translateY(${virtualItem.start}px)`,
-              }}
-            >
-              <span className="text-muted-foreground">{device.brand}</span>
-              <span className="truncate">{device.label}</span>
-            </ComboboxItem>
-          );
-        })}
-      </div>
-    </div>
   );
 }

@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,19 +12,6 @@
      system SF on Apple devices, then to Geist. */
   --font-apple: var(--font-sf-pro), -apple-system, BlinkMacSystemFont,
     "SF Pro Display", var(--font-sans), sans-serif;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -42,6 +28,9 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* Read directly by beUI components (input hover, success tick). */
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--primary);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -51,44 +40,45 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/*
- * Radix "sand" dark scale — the same palette animations.dev uses.
- * Dark-only site, so these live on `:root` with no light counterpart.
- */
+/* A contribution-graph day getting its commits: it holds the empty-day color
+   until its delay, then eases into its own fill. Only `from` is given, so the
+   end state is whatever level the cell is drawn at. */
+@theme {
+  /* A day with no commits: the foreground (oklch 96%) at 3%. Written as
+     legacy `rgb()` like the level colors it animates into; Chrome interpolates
+     a modern color space with alpha against them from a near-black instead. */
+  --color-graph-empty: rgb(242 242 242 / 0.03);
+  --animate-commit: commit 900ms ease-out both;
+
+  @keyframes commit {
+    from {
+      fill: var(--color-graph-empty);
+    }
+  }
+}
+
+/* Dark-only site, so the palette lives on `:root` with no light counterpart. */
 :root {
-  --background: #111110;         /* sand-1  */
-  --foreground: #ffffff;         /* sand-12 */
-  --card: #191918;               /* sand-2  */
-  --card-foreground: #ffffff;
-  --popover: #191918;
-  --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #111110;
-  --secondary: #222221;          /* sand-3  */
-  --secondary-foreground: #ffffff;
-  --muted: #222221;
-  --muted-foreground: #b5b3ad;   /* sand-11 */
-  --accent: #2a2a28;             /* sand-4  */
-  --accent-foreground: #ffffff;
-  --destructive: #e5484d;
-  --border: #ffffff12;           /* sand-alpha-3 */
-  --input: #ffffff1b;            /* sand-alpha-4 */
-  --ring: #62605b;               /* sand-8  */
-  --brand: #fad657;
-  --chart-1: #b5b3ad;
-  --chart-2: #7c7b74;
-  --chart-3: #62605b;
-  --chart-4: #494844;
-  --chart-5: #31312e;
+  --background: #151515;
+  --foreground: oklch(96% 0 0);
+  --card: #1c1c1c;
+  --card-foreground: oklch(96% 0 0);
+  --popover: #1c1c1c;
+  --popover-foreground: oklch(96% 0 0);
+  --primary: oklch(72% 0.15 150);
+  --primary-foreground: oklch(15% 0 0);
+  --secondary: #1c1c1c;
+  --secondary-foreground: oklch(96% 0 0);
+  --muted: #1c1c1c;
+  --muted-foreground: oklch(62% 0 0);
+  --accent: oklch(72% 0.15 150);
+  --accent-foreground: oklch(15% 0 0);
+  --destructive: oklch(62% 0.22 25);
+  --border: rgb(255 255 255 / 0.05);
+  --border-strong: rgb(255 255 255 / 0.12);
+  --input: rgb(255 255 255 / 0.05);
+  --ring: oklch(72% 0.15 150 / 0.55);
   --radius: 0.625rem;
-  --sidebar: #191918;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #111110;
-  --sidebar-accent: #2a2a28;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #ffffff12;
-  --sidebar-ring: #62605b;
 }
 
 @layer base {
@@ -101,5 +91,12 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Tailwind v4 dropped the pointer cursor from buttons; this restores it
+     site-wide, as its upgrade guide suggests, so every button — ours and
+     beUI's — shows it without a per-component class. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }

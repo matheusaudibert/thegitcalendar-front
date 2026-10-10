@@ -18,7 +18,3 @@ export const WALLPAPER_URL = "/commit-preview.png";
  */
 export const SHOWCASE_WIDTH = 1290;
 export const SHOWCASE_HEIGHT = 2796;
-
-export function githubProfileUrl(username: string) {
-  return `https://github.com/${username}`;
-}

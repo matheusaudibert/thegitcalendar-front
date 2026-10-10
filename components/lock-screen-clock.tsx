@@ -2,16 +2,12 @@
 
 import { useSyncExternalStore } from "react";
 
-import type { Locale } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 
-// Intl wants a full BCP 47 tag to pick the right abbreviations. `en-US` rather
-// than `en-GB` because CLDR abbreviates September as "Sept" for en-GB, while
-// iOS shows "Sep". The order is fixed by `formatToParts` below, so en-US's
-// month-first default never reaches the screen.
-const INTL_LOCALES: Record<Locale, string> = {
-  en: "en-US",
-  pt: "pt-BR",
-};
+import { INTL_LOCALES, type Locale } from "@/lib/i18n";
+
+// en-US's month-first default never reaches the screen: the order is fixed
+// by `formatToParts` below.
 
 /**
  * Ticks once a minute. The snapshot is the current minute rather than the
@@ -69,7 +65,14 @@ function formatTime(date: Date, locale: string) {
   }).format(date);
 }
 
-export function LockScreenClock({ locale }: { locale: Locale }) {
+export function LockScreenClock({
+  locale,
+  onLightWallpaper = false,
+}: {
+  locale: Locale;
+  /** White would vanish on a light wallpaper; the page's dark tone is used. */
+  onLightWallpaper?: boolean;
+}) {
   const minute = useSyncExternalStore(
     subscribe,
     getSnapshot,
@@ -87,7 +90,10 @@ export function LockScreenClock({ locale }: { locale: Locale }) {
          scales with, so the clock keeps iPhone proportions at every size.
          The ratios come off a real 1290x2796 lock-screen capture: the digits
          are 9.7% of the screen height, the date cap-height 1.7%. */
-      className="pointer-events-none absolute inset-x-0 top-[calc(32*var(--u))] flex select-none flex-col items-center font-apple text-white"
+      className={cn(
+        "pointer-events-none absolute inset-x-0 top-[calc(32*var(--u))] flex select-none flex-col items-center font-apple",
+        onLightWallpaper ? "text-background" : "text-white"
+      )}
     >
       {/* Geist rather than the SF file: that file has a single weight, so a
           lighter `font-*` would render identically to semibold. At this size
