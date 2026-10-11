@@ -23,6 +23,19 @@ export function isLightBackground(background: Background) {
   return background === "light";
 }
 
+/**
+ * The lock-screen clock's colour: the swatch of the chosen contribution colour,
+ * so the time is tinted like the brightest days. White on the light wallpaper
+ * and black on the dark ones would vanish, so those fall back to the contrast
+ * tone the clock used before.
+ */
+export function clockColor(color: ColorName, background: Background) {
+  const light = isLightBackground(background);
+  if (color === "white" && light) return "#151515";
+  if (color === "black" && !light) return "#ffffff";
+  return COLOR_OPTIONS.find((option) => option.value === color)?.swatch ?? "#ffffff";
+}
+
 /** Same source: the `BACKGROUND_THEMES` presets the `background` param selects. */
 export const BACKGROUND_OPTIONS: { value: Background; swatch: string }[] = [
   { value: "github", swatch: "#0d1117" },

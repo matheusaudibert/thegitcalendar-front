@@ -3,7 +3,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { getDictionary } from "@/lib/locale";
 
 export default async function NotFound() {
-  const { t } = await getDictionary();
+  const { t, locale } = await getDictionary();
 
   return (
     <main className="flex flex-1 flex-col">
@@ -14,7 +14,7 @@ export default async function NotFound() {
         homeHref="/"
         homeLabel={t.notFoundHome}
       />
-      <SiteFooter />
+      <SiteFooter t={t} locale={locale} />
     </main>
   );
 }

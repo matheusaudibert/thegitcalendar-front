@@ -10,6 +10,7 @@ import { dictionaries } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
 import { PAGE_ZOOM_SCRIPT } from "@/lib/page-zoom";
 import { REVEAL_GUARD_SCRIPT } from "@/lib/reveal-guard";
+import { THEME_SCRIPT } from "@/lib/theme";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -71,21 +72,21 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    // Dark-only site, so the `dark` class is fixed rather than toggled. The
-    // palette lives on `:root`; the class is here so beUI's `dark:` styles
-    // apply.
+    // The `dark` class is toggled by `THEME_SCRIPT` before first paint, not
+    // rendered here: the server cannot know the visitor's choice or OS theme.
     <html
       lang={locale}
       className={cn(
-        "dark h-full font-sans antialiased",
+        "h-full font-sans antialiased",
         geist.variable,
         sfPro.variable
       )}
-      // The reveal guard below sets an attribute here before React hydrates,
-      // and the zoom script a style.
+      // The scripts below set a class, an attribute and styles here before
+      // React hydrates.
       suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: REVEAL_GUARD_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: PAGE_ZOOM_SCRIPT }} />
       </head>

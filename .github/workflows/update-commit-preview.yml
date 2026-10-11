@@ -1,11 +1,13 @@
 name: Update commit preview image
 
-# Regenerates public/commit-preview.png from the contribution-graph API and
-# commits it to the repo. The hero mockup then serves it as a static asset
-# instead of hitting the API on every page load, which used to show up as a
-# visible delay before the wallpaper appeared.
+# Regenerates public/commit-preview.png (dark background) and
+# public/commit-preview-light.png (light) from the contribution-graph API and
+# commits them to the repo. The hero mockup then serves the one matching the
+# visitor's theme as a static asset instead of hitting the API on every page
+# load, which used to show up as a visible delay before the wallpaper appeared.
 #
-# Keep this in sync with lib/showcase-users.ts (SHOWCASE_USER / WIDTH / HEIGHT).
+# Keep this in sync with lib/showcase-users.ts (SHOWCASE_USER / WIDTH / HEIGHT
+# / WALLPAPER_URLS).
 
 on:
   schedule:
@@ -26,29 +28,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download commit preview image
+      - name: Download commit preview images
         env:
           USERNAME: matheusaudibert
           WIDTH: "1290"
           HEIGHT: "2796"
         run: |
           set -euo pipefail
-          url="https://gitcalendar-image.vercel.app/graph?username=${USERNAME}&background=github&color=green&shape=rounded&width=${WIDTH}&height=${HEIGHT}"
-          curl --fail --silent --show-error --location \
-            --retry 3 --retry-delay 5 \
-            --output public/commit-preview.png \
-            "$url"
-          file public/commit-preview.png | grep -qi 'PNG image data'
+          download() {
+            url="https://gitcalendar-image.vercel.app/graph?username=${USERNAME}&background=$1&color=green&shape=rounded&width=${WIDTH}&height=${HEIGHT}"
+            curl --fail --silent --show-error --location \
+              --retry 3 --retry-delay 5 \
+              --output "$2" \
+              "$url"
+            file "$2" | grep -qi 'PNG image data'
+          }
+          download dark public/commit-preview.png
+          download light public/commit-preview-light.png
 
       - name: Commit and push if changed
         run: |
           set -euo pipefail
-          if git diff --quiet -- public/commit-preview.png; then
-            echo "No changes to public/commit-preview.png"
+          files="public/commit-preview.png public/commit-preview-light.png"
+          # `status` rather than `diff`, so a file that is new still counts.
+          if [ -z "$(git status --porcelain -- $files)" ]; then
+            echo "No changes to the commit preview images"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/commit-preview.png
-          git commit -m "chore: update commit preview image"
+          git add $files
+          git commit -m "chore: update commit preview images"
           git push

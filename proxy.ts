@@ -4,9 +4,9 @@ import { isLocale } from "@/lib/i18n";
 
 /**
  * Development-only language override: `?lang=en` or `?lang=pt` stands in for
- * the browser's `Accept-Language`, so either translation can be checked
- * without changing browser settings. In production the parameter is ignored
- * and visitors always get their own language (see `lib/locale.ts`).
+ * the browser's `Accept-Language` and the footer toggle's cookie, so either
+ * translation can be checked without changing browser settings. In production
+ * the parameter is ignored (see `lib/locale.ts`).
  */
 export function proxy(request: NextRequest) {
   if (process.env.NODE_ENV !== "development") return NextResponse.next();
@@ -16,6 +16,8 @@ export function proxy(request: NextRequest) {
 
   const headers = new Headers(request.headers);
   headers.set("accept-language", lang);
+  // The toggle's cookie outranks the header, so it is dropped for this request.
+  headers.delete("cookie");
   return NextResponse.next({ request: { headers } });
 }
 

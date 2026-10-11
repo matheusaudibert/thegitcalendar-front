@@ -33,7 +33,7 @@ export default async function Home() {
         <FaqSection t={t} />
       </div>
 
-      <SiteFooter />
+      <SiteFooter t={t} locale={locale} />
     </main>
   );
 }

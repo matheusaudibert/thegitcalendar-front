@@ -15,13 +15,13 @@ const CELL = 42;
 const GAP = 8;
 const PITCH = CELL + GAP;
 
-/** GitHub's dark-theme contribution colors, by level (0 = no commits). */
+/** GitHub's contribution colors, light then dark, by level (0 = no commits). */
 const LEVEL_FILL = [
   "fill-graph-empty",
-  "fill-[#0e4429]",
-  "fill-[#006d32]",
-  "fill-[#26a641]",
-  "fill-[#39d353]",
+  "fill-[#9be9a8] dark:fill-[#0e4429]",
+  "fill-[#40c463] dark:fill-[#006d32]",
+  "fill-[#30a14e] dark:fill-[#26a641]",
+  "fill-[#216e39] dark:fill-[#39d353]",
 ] as const;
 
 /** Upper bounds of each level's share of days, most days having none. */

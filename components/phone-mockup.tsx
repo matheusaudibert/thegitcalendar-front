@@ -3,11 +3,12 @@ import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type PhoneMockupProps = {
-  imageUrl: string;
+  /** A pair is shown by theme: `light` normally, `dark` under `.dark`. */
+  imageUrl: string | { light: string; dark: string };
   alt: string;
   locale: Locale;
-  /** Whether the wallpaper is light, so the clock drawn over it turns dark. */
-  lightWallpaper?: boolean;
+  /** The lock-screen clock's colour, matched to the wallpaper's commits. */
+  clockColor: string;
   className?: string;
 };
 
@@ -20,7 +21,7 @@ export function PhoneMockup({
   imageUrl,
   alt,
   locale,
-  lightWallpaper = false,
+  clockColor,
   className,
 }: PhoneMockupProps) {
   return (
@@ -34,13 +35,30 @@ export function PhoneMockup({
       <div className="absolute inset-0 rounded-[calc(36*var(--u))] bg-gradient-to-b from-[#3A3A3C] via-[#1C1C1E] to-[#3A3A3C] shadow-2xl">
         <div className="absolute inset-[calc(3*var(--u))] rounded-[calc(33*var(--u))] bg-[#1C1C1E]">
           <div className="absolute inset-[calc(3*var(--u))] overflow-hidden rounded-[calc(30*var(--u))] bg-black">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={imageUrl}
-              alt={alt}
-              className="h-full w-full object-cover"
-            />
-            <LockScreenClock locale={locale} onLightWallpaper={lightWallpaper} />
+            {typeof imageUrl === "string" ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={imageUrl}
+                alt={alt}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrl.light}
+                  alt={alt}
+                  className="h-full w-full object-cover dark:hidden"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrl.dark}
+                  alt={alt}
+                  className="hidden h-full w-full object-cover dark:block"
+                />
+              </>
+            )}
+            <LockScreenClock locale={locale} color={clockColor} />
           </div>
         </div>
       </div>

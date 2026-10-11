@@ -113,6 +113,8 @@ export const dictionaries = {
       devcelio:
         "And this wallpaper my buddy @audibertdev launched turned out really beautiful",
     },
+    theme: { label: "Theme", system: "System", light: "Light", dark: "Dark" },
+    language: { label: "Language", pt: "Português", en: "English" },
     faqTitle: "FAQ",
     faq: [
       {
@@ -295,6 +297,8 @@ export const dictionaries = {
       devcelio:
         "E esse wallpaper que o mano @audibertdev lançou, ficou muito lindo",
     },
+    theme: { label: "Tema", system: "Sistema", light: "Claro", dark: "Escuro" },
+    language: { label: "Idioma", pt: "Português", en: "English" },
     faqTitle: "FAQ",
     faq: [
       {

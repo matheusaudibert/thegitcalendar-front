@@ -2,8 +2,6 @@
 
 import { useSyncExternalStore } from "react";
 
-import { cn } from "@/lib/utils";
-
 import { INTL_LOCALES, type Locale } from "@/lib/i18n";
 
 // en-US's month-first default never reaches the screen: the order is fixed
@@ -67,11 +65,11 @@ function formatTime(date: Date, locale: string) {
 
 export function LockScreenClock({
   locale,
-  onLightWallpaper = false,
+  color,
 }: {
   locale: Locale;
-  /** White would vanish on a light wallpaper; the page's dark tone is used. */
-  onLightWallpaper?: boolean;
+  /** The selected contribution colour (see `clockColor` in `lib/colors.ts`). */
+  color: string;
 }) {
   const minute = useSyncExternalStore(
     subscribe,
@@ -90,10 +88,8 @@ export function LockScreenClock({
          scales with, so the clock keeps iPhone proportions at every size.
          The ratios come off a real 1290x2796 lock-screen capture: the digits
          are 9.7% of the screen height, the date cap-height 1.7%. */
-      className={cn(
-        "pointer-events-none absolute inset-x-0 top-[calc(32*var(--u))] flex select-none flex-col items-center font-apple",
-        onLightWallpaper ? "text-background" : "text-white"
-      )}
+      className="pointer-events-none absolute inset-x-0 top-[calc(32*var(--u))] flex select-none flex-col items-center font-apple"
+      style={{ color }}
     >
       {/* Geist rather than the SF file: that file has a single weight, so a
           lighter `font-*` would render identically to semibold. At this size

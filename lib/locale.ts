@@ -1,20 +1,27 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import {
   dictionaries,
+  isLocale,
   parseAcceptLanguage,
   type Dictionary,
   type Locale,
 } from "@/lib/i18n";
+import { LOCALE_COOKIE } from "@/lib/locale-cookie";
 
 /**
- * Resolves the locale for the current request from the browser's
- * `Accept-Language` header. There is deliberately no override for visitors —
- * no cookie, no switcher: they always get their own language. In development
- * only, `proxy.ts` lets `?lang=` stand in for the header.
+ * Resolves the locale for the current request: the language picked in the
+ * footer toggle (`LOCALE_COOKIE`) if there is one, otherwise the browser's
+ * `Accept-Language` header. In development only, `proxy.ts` lets `?lang=`
+ * stand in for both.
  */
 export async function getLocale(): Promise<Locale> {
-  const requestHeaders = await headers();
+  const [requestCookies, requestHeaders] = await Promise.all([
+    cookies(),
+    headers(),
+  ]);
+  const chosen = requestCookies.get(LOCALE_COOKIE)?.value;
+  if (isLocale(chosen)) return chosen;
   return parseAcceptLanguage(requestHeaders.get("accept-language"));
 }
 
