@@ -116,16 +116,22 @@ export const dictionaries = {
     faqTitle: "FAQ",
     faq: [
       {
-        id: "customize",
-        question: "Can I customize the wallpaper?",
+        id: "how",
+        question: "How does this project work?",
         answer:
-          "Yes. You can choose the color and shape of the contribution squares, as well as the background color of the image.",
+          "The project is built on an [**API**](https://github.com/matheusaudibert/thegitcalendar) that generates an image sized for your phone's screen, showing your GitHub contribution graph. An automation on your phone sends a `GET` request to that API every day and sets the image it returns as your wallpaper. On iPhone, this runs natively through the [Shortcuts](https://apps.apple.com/app/id915249334) app's automations. Android has no built-in equivalent, so the automation is created with the [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) app.",
       },
       {
-        id: "private",
-        question: "Does the wallpaper include private contributions?",
+        id: "login",
+        question: "Do I need to sign in or connect my GitHub account?",
         answer:
-          "Only if your GitHub profile shows them. By default, GitHub displays public contributions only. To include private ones, enable private contributions in your profile settings. [**Learn how in GitHub's docs**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
+          "No. The project only needs your GitHub username. No password, token or permission is requested: the API reads the contribution graph that is already public on your profile and builds the image from it.",
+      },
+      {
+        id: "safety",
+        question: "Is it safe to run the automation on my phone?",
+        answer:
+          "Yes. The automation does only two things: it downloads the image from the API and sets it as your wallpaper. It doesn't read your files, contacts, photos or any other data on your phone, and nothing is sent to the API besides your username and the image settings. Every step is visible in the [Shortcuts](https://apps.apple.com/app/id915249334) or [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) app, so you can review it before turning it on, and the API's code is open on [**GitHub**](https://github.com/matheusaudibert/thegitcalendar).",
       },
       {
         id: "devices",
@@ -134,10 +140,16 @@ export const dictionaries = {
           "Not yet. Support for new iPhone and Android models is added continuously, with the goal of covering as many devices as possible. If you can't find your phone, open an issue on [**GitHub**](https://github.com/matheusaudibert/thegitcalendar) with its screen resolution, or ask for it to be added.",
       },
       {
-        id: "how",
-        question: "How does this project work?",
+        id: "private",
+        question: "Does the wallpaper include private contributions?",
         answer:
-          "The project is built on an [**API**](https://github.com/matheusaudibert/thegitcalendar) that generates an image sized for your phone's screen, showing your GitHub contribution graph. An automation on your phone sends a `GET` request to that API every day and sets the image it returns as your wallpaper. On iPhone, this runs natively through the [Shortcuts](https://apps.apple.com/app/id915249334) app's automations. Android has no built-in equivalent, so the automation is created with the [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) app.",
+          "Only if your GitHub profile shows them. By default, GitHub displays public contributions only. To include private ones, enable private contributions in your profile settings. [**Learn how in GitHub's docs**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
+      },
+      {
+        id: "customize",
+        question: "Can I customize the wallpaper?",
+        answer:
+          "Yes. You can choose the color and shape of the contribution squares, as well as the background color of the image.",
       },
     ],
     wizard: {
@@ -286,16 +298,22 @@ export const dictionaries = {
     faqTitle: "FAQ",
     faq: [
       {
-        id: "customize",
-        question: "Posso personalizar o wallpaper?",
+        id: "how",
+        question: "Como o projeto funciona?",
         answer:
-          "Sim. Você pode escolher a cor e o formato dos quadrados de contribuição, além da cor de fundo da imagem.",
+          "O projeto é baseado em uma [**API**](https://github.com/matheusaudibert/thegitcalendar) que gera uma imagem no tamanho da tela do seu celular, com o seu gráfico de contribuições do GitHub. Uma automação no celular faz uma requisição `GET` a essa API todos os dias e define a imagem retornada como plano de fundo. No iPhone, isso é feito de forma nativa pelas automações do app [Atalhos](https://apps.apple.com/app/id915249334). O Android não oferece um recurso equivalente, então a automação é criada com o app [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid).",
       },
       {
-        id: "private",
-        question: "O wallpaper inclui contribuições privadas?",
+        id: "login",
+        question: "Preciso fazer login ou conectar minha conta do GitHub?",
         answer:
-          "Somente se o seu perfil do GitHub as exibir. Por padrão, o GitHub mostra apenas as contribuições públicas. Para incluir as privadas, ative a exibição de contribuições privadas nas configurações do seu perfil. [**Veja como na documentação do GitHub**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
+          "Não. O projeto só precisa do seu nome de usuário do GitHub. Nenhuma senha, token ou permissão é solicitada: a API lê o gráfico de contribuições que já aparece publicamente no seu perfil e gera a imagem a partir dele.",
+      },
+      {
+        id: "safety",
+        question: "É seguro usar a automação no meu celular?",
+        answer:
+          "Sim. A automação faz apenas duas coisas: baixa a imagem da API e a define como plano de fundo. Ela não lê seus arquivos, contatos, fotos ou qualquer outro dado do celular, e nada é enviado à API além do seu nome de usuário e das configurações da imagem. Todos os passos ficam visíveis no app [Atalhos](https://apps.apple.com/app/id915249334) ou no [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid), então você pode revisá-los antes de ativar, e o código da API é aberto no [**GitHub**](https://github.com/matheusaudibert/thegitcalendar).",
       },
       {
         id: "devices",
@@ -304,10 +322,16 @@ export const dictionaries = {
           "Ainda não. O suporte a novos modelos de iPhone e Android é adicionado continuamente, com o objetivo de cobrir o maior número possível de aparelhos. Se o seu celular não estiver na lista, abra uma issue no [**GitHub**](https://github.com/matheusaudibert/thegitcalendar) informando a resolução da tela dele ou pedindo que ela seja adicionada.",
       },
       {
-        id: "how",
-        question: "Como o projeto funciona?",
+        id: "private",
+        question: "O wallpaper inclui contribuições privadas?",
         answer:
-          "O projeto é baseado em uma [**API**](https://github.com/matheusaudibert/thegitcalendar) que gera uma imagem no tamanho da tela do seu celular, com o seu gráfico de contribuições do GitHub. Uma automação no celular faz uma requisição `GET` a essa API todos os dias e define a imagem retornada como plano de fundo. No iPhone, isso é feito de forma nativa pelas automações do app [Atalhos](https://apps.apple.com/app/id915249334). O Android não oferece um recurso equivalente, então a automação é criada com o app [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid).",
+          "Somente se o seu perfil do GitHub as exibir. Por padrão, o GitHub mostra apenas as contribuições públicas. Para incluir as privadas, ative a exibição de contribuições privadas nas configurações do seu perfil. [**Veja como na documentação do GitHub**](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).",
+      },
+      {
+        id: "customize",
+        question: "Posso personalizar o wallpaper?",
+        answer:
+          "Sim. Você pode escolher a cor e o formato dos quadrados de contribuição, além da cor de fundo da imagem.",
       },
     ],
     wizard: {

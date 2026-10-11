@@ -1,4 +1,12 @@
-import { Lock, Palette, Smartphone, Workflow, type LucideIcon } from "lucide-react";
+import {
+  KeyRound,
+  Lock,
+  Palette,
+  ShieldCheck,
+  Smartphone,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
 
 import { BouncyAccordion } from "@/components/motion/bouncy-accordion";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
@@ -13,6 +21,8 @@ const FAQ_ICONS: Record<FaqId, LucideIcon> = {
   private: Lock,
   devices: Smartphone,
   how: Workflow,
+  login: KeyRound,
+  safety: ShieldCheck,
 };
 
 export function FaqSection({ t }: { t: Dictionary }) {
