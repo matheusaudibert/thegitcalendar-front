@@ -1,0 +1,47 @@
+name: Update GitHub stars
+
+# Rewrites lib/github-stars.ts with the repo's current star count and commits
+# it. The hero's star button reads that constant, so the page never calls the
+# GitHub API (and its rate limit) on every visit.
+
+on:
+  schedule:
+    - cron: "15 9 * * *" # daily at 06:15 America/Sao_Paulo (UTC-3, no DST) = 09:15 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  update-stars:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch star count
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          stars=$(gh api "repos/${GITHUB_REPOSITORY}" --jq '.stargazers_count')
+          [[ "$stars" =~ ^[0-9]+$ ]]
+          sed -i -E "s/^const FETCHED_STARS = [0-9]+;/const FETCHED_STARS = ${stars};/" lib/github-stars.ts
+          grep -q "^const FETCHED_STARS = ${stars};" lib/github-stars.ts
+
+      - name: Commit and push if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- lib/github-stars.ts; then
+            echo "No changes to lib/github-stars.ts"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/github-stars.ts
+          git commit -m "chore: update GitHub star count"
+          git push

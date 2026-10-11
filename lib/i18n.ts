@@ -76,6 +76,7 @@ export const dictionaries = {
       "Turn your GitHub contribution graph into a wallpaper that updates itself every day.",
     installIos: "Install on iOS",
     installAndroid: "Install on Android",
+    starProject: "Star the project",
     wallpaperAlt: "GitHub contribution graph as an iPhone wallpaper",
     howTitle: "How it works",
     /** Keyed by the step ids in `components/how-it-works-section.tsx`. */
@@ -130,13 +131,13 @@ export const dictionaries = {
         id: "devices",
         question: "Does the project support every phone?",
         answer:
-          "Not yet. Support for new iPhone and Android models is added continuously, with the goal of covering as many devices as possible.",
+          "Not yet. Support for new iPhone and Android models is added continuously, with the goal of covering as many devices as possible. If you can't find your phone, open an issue on [**GitHub**](https://github.com/matheusaudibert/thegitcalendar) with its screen resolution, or ask for it to be added.",
       },
       {
         id: "how",
         question: "How does this project work?",
         answer:
-          "The project is built on an API that generates an image sized for your phone's screen, showing your GitHub contribution graph. An automation on your phone sends a `GET` request to that API every day and sets the image it returns as your wallpaper. On iPhone, this runs natively through the [Shortcuts](https://apps.apple.com/app/id915249334) app's automations. Android has no built-in equivalent, so the automation is created with the [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) app.",
+          "The project is built on an [**API**](https://github.com/matheusaudibert/thegitcalendar) that generates an image sized for your phone's screen, showing your GitHub contribution graph. An automation on your phone sends a `GET` request to that API every day and sets the image it returns as your wallpaper. On iPhone, this runs natively through the [Shortcuts](https://apps.apple.com/app/id915249334) app's automations. Android has no built-in equivalent, so the automation is created with the [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) app.",
       },
     ],
     wizard: {
@@ -247,6 +248,7 @@ export const dictionaries = {
       "Transforme seu gráfico de contribuições do GitHub em um wallpaper que se atualiza todo dia.",
     installIos: "Instalar no iOS",
     installAndroid: "Instalar no Android",
+    starProject: "Dê uma estrela no projeto",
     wallpaperAlt: "Gráfico de contribuições do GitHub como wallpaper de iPhone",
     howTitle: "Como funciona",
     howSteps: {
@@ -299,13 +301,13 @@ export const dictionaries = {
         id: "devices",
         question: "O projeto é compatível com todos os celulares?",
         answer:
-          "Ainda não. O suporte a novos modelos de iPhone e Android é adicionado continuamente, com o objetivo de cobrir o maior número possível de aparelhos.",
+          "Ainda não. O suporte a novos modelos de iPhone e Android é adicionado continuamente, com o objetivo de cobrir o maior número possível de aparelhos. Se o seu celular não estiver na lista, abra uma issue no [**GitHub**](https://github.com/matheusaudibert/thegitcalendar) informando a resolução da tela dele ou pedindo que ela seja adicionada.",
       },
       {
         id: "how",
         question: "Como o projeto funciona?",
         answer:
-          "O projeto é baseado em uma API que gera uma imagem no tamanho da tela do seu celular, com o seu gráfico de contribuições do GitHub. Uma automação no celular faz uma requisição `GET` a essa API todos os dias e define a imagem retornada como plano de fundo. No iPhone, isso é feito de forma nativa pelas automações do app [Atalhos](https://apps.apple.com/app/id915249334). O Android não oferece um recurso equivalente, então a automação é criada com o app [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid).",
+          "O projeto é baseado em uma [**API**](https://github.com/matheusaudibert/thegitcalendar) que gera uma imagem no tamanho da tela do seu celular, com o seu gráfico de contribuições do GitHub. Uma automação no celular faz uma requisição `GET` a essa API todos os dias e define a imagem retornada como plano de fundo. No iPhone, isso é feito de forma nativa pelas automações do app [Atalhos](https://apps.apple.com/app/id915249334). O Android não oferece um recurso equivalente, então a automação é criada com o app [**MacroDroid**](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid).",
       },
     ],
     wizard: {

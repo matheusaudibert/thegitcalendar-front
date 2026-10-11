@@ -45,7 +45,10 @@ export function FaqSection({ t }: { t: Dictionary }) {
           classNames={{
             trigger: "min-h-[60px]",
             title: "whitespace-normal text-base sm:text-lg font-normal",
-            description: "text-base leading-[1.65] text-foreground/80",
+            // Bold links (`[**x**](url)`) get the same hover as the Shortcuts
+            // `StoreLink`; plain links elsewhere stay undecorated.
+            description:
+              "text-base leading-[1.65] text-foreground/80 [&_a:has(strong)]:hover:opacity-80",
           }}
         />
       </ScrollReveal>
