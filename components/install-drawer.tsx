@@ -93,6 +93,10 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
           title={w.deviceTitle}
           description={w.deviceDescription}
           isLast={!deviceChosen}
+          // Each step's entry animation makes it its own stacking context, so
+          // the device panel can't escape it with its own z-index — the whole
+          // step has to sit above the steps that appear below it.
+          className="z-10"
         >
           <DeviceStep
             t={t}
