@@ -1,6 +1,6 @@
 name: Update GitHub stars
 
-# Rewrites lib/github-stars.ts with the repo's current star count and commits
+# Rewrites lib/github-stars.ts with matheusaudibert/thegitcalendar's star count and commits
 # it. The hero's star button reads that constant, so the page never calls the
 # GitHub API (and its rate limit) on every visit.
 
@@ -26,9 +26,10 @@ jobs:
       - name: Fetch star count
         env:
           GH_TOKEN: ${{ github.token }}
+          STARS_REPO: matheusaudibert/thegitcalendar
         run: |
           set -euo pipefail
-          stars=$(gh api "repos/${GITHUB_REPOSITORY}" --jq '.stargazers_count')
+          stars=$(gh api "repos/${STARS_REPO}" --jq '.stargazers_count')
           [[ "$stars" =~ ^[0-9]+$ ]]
           sed -i -E "s/^const FETCHED_STARS = [0-9]+;/const FETCHED_STARS = ${stars};/" lib/github-stars.ts
           grep -q "^const FETCHED_STARS = ${stars};" lib/github-stars.ts
