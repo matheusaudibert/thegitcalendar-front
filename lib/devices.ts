@@ -19,8 +19,8 @@ export const IPHONE_DEVICES: Device[] = [
   { label: "iPhone 12 Pro Max / 13 Pro Max / 14 Plus", width: 1284, height: 2778 },
   { label: "iPhone 14 Pro / 15 / 15 Pro / 16", width: 1179, height: 2556 },
   { label: "iPhone 14 Pro Max / 15 Plus / 15 Pro Max / 16 Plus", width: 1290, height: 2796 },
-  { label: "iPhone 16 Pro / 17 / 17 Pro", width: 1206, height: 2622 },
-  { label: "iPhone 16 Pro Max / 17 Pro Max", width: 1320, height: 2868 },
+  { label: "iPhone 16 Pro / 17 / 17 Pro / 18 Pro", width: 1206, height: 2622 },
+  { label: "iPhone 16 Pro Max / 17 Pro Max / 18 Pro Max", width: 1320, height: 2868 },
   { label: "iPhone Air", width: 1260, height: 2736 },
 ];
 
