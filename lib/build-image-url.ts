@@ -10,6 +10,7 @@ export type ColorName =
   | "white"
   | "black";
 export type Shape = "rounded" | "square" | "circle";
+export type Language = "pt" | "en";
 
 /**
  * Canonical host: `gitcallendar-image` (two L's) 307-redirects here, so we
@@ -24,6 +25,8 @@ export type BuildImageUrlParams = {
   background: Background;
   color: ColorName;
   shape: Shape;
+  /** Omitted, the API renders in its own default language. */
+  language?: Language;
 };
 
 export function buildImageUrl({
@@ -33,6 +36,7 @@ export function buildImageUrl({
   background,
   color,
   shape,
+  language,
 }: BuildImageUrlParams): string {
   const params = new URLSearchParams({
     username,
@@ -42,6 +46,7 @@ export function buildImageUrl({
     height: String(height),
     width: String(width),
   });
+  if (language) params.set("language", language);
 
   return `${IMAGE_ENDPOINT}?${params.toString()}`;
 }

@@ -9,7 +9,7 @@ import { UsernameField } from "@/components/username-field";
 import { useWizard } from "@/components/wizard-provider";
 import type { Platform } from "@/hooks/use-wizard-state";
 import { GITHUB_STARS } from "@/lib/github-stars";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import { REPO_URL } from "@/lib/site";
 
 /**
@@ -17,7 +17,7 @@ import { REPO_URL } from "@/lib/site";
  * The drawer only opens once the username is valid, so it can start straight
  * at the device step; until then the buttons send the visitor to the field.
  */
-export function HeroActions({ t }: { t: Dictionary }) {
+export function HeroActions({ t, locale }: { t: Dictionary; locale: Locale }) {
   const { githubUser, requestUsername } = useWizard();
   const [platform, setPlatform] = useState<Platform | null>(null);
   // Stable, because the bottom sheet re-arms its scroll lock whenever this
@@ -77,7 +77,7 @@ export function HeroActions({ t }: { t: Dictionary }) {
         )}
       </ButtonLink>
 
-      <InstallDrawer t={t} platform={platform} onClose={handleClose} />
+      <InstallDrawer t={t} locale={locale} platform={platform} onClose={handleClose} />
     </div>
   );
 }

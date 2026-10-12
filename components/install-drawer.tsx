@@ -10,8 +10,8 @@ import { InstructionStepView } from "@/components/instruction-step";
 import { StepShell } from "@/components/step-shell";
 import { useWizard } from "@/components/wizard-provider";
 import type { Platform } from "@/hooks/use-wizard-state";
-import { buildImageUrl } from "@/lib/build-image-url";
-import type { Dictionary } from "@/lib/i18n";
+import { buildImageUrl, type Language } from "@/lib/build-image-url";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import { getInstructions } from "@/lib/instructions";
 
 /** iPhone 14 Pro / 15 / 15 Pro / 16 — also the backend's own default size. */
@@ -20,12 +20,13 @@ const DEFAULT_HEIGHT = 2556;
 
 type InstallDrawerProps = {
   t: Dictionary;
+  locale: Locale;
   /** Which hero button opened the drawer; `null` keeps it closed. */
   platform: Platform | null;
   onClose: () => void;
 };
 
-export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
+export function InstallDrawer({ t, locale, platform, onClose }: InstallDrawerProps) {
   const { state, dispatch } = useWizard();
 
   // `platform` doubles as the open flag, so it drops to null the moment the
@@ -45,6 +46,9 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
   // here starts at the device.
   const deviceChosen = device !== null;
 
+  // Starts on the site's language; only the downloaded wallpaper follows it.
+  const [language, setLanguage] = useState<Language>(locale);
+
   const imageUrl = useMemo(
     () =>
       buildImageUrl({
@@ -54,8 +58,9 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
         background: state.background,
         color: state.color,
         shape: state.shape,
+        language,
       }),
-    [state.username, device, state.background, state.color, state.shape]
+    [state.username, device, state.background, state.color, state.shape, language]
   );
 
   const instructions = useMemo(
@@ -120,6 +125,7 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
                 background={state.background}
                 color={state.color}
                 shape={state.shape}
+                language={language}
                 onBackgroundChange={(value) =>
                   dispatch({ type: "SET_BACKGROUND", value })
                 }
@@ -129,6 +135,7 @@ export function InstallDrawer({ t, platform, onClose }: InstallDrawerProps) {
                 onShapeChange={(value) =>
                   dispatch({ type: "SET_SHAPE", value })
                 }
+                onLanguageChange={setLanguage}
               />
             </StepShell>
 

@@ -184,6 +184,7 @@ export const dictionaries = {
       commitColor: "Commit Color",
       commitShape: "Commit Shape",
       backgroundColor: "Background Color",
+      language: "Language",
 
 
       copy: "Copy",
@@ -210,6 +211,10 @@ export const dictionaries = {
         github: "GitHub",
         dark: "Dark",
         light: "Light",
+      },
+      languages: {
+        en: "English",
+        pt: "Portuguese",
       },
     },
     instructions: {
@@ -368,6 +373,7 @@ export const dictionaries = {
       commitColor: "Cor das contribuições",
       commitShape: "Formato das contribuições",
       backgroundColor: "Cor de fundo",
+      language: "Idioma",
 
 
       copy: "Copiar",
@@ -394,6 +400,10 @@ export const dictionaries = {
         github: "GitHub",
         dark: "Escuro",
         light: "Claro",
+      },
+      languages: {
+        en: "Inglês",
+        pt: "Português",
       },
     },
     instructions: {

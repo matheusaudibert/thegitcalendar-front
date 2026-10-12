@@ -7,6 +7,7 @@ import {
   ColorSelectorLabel,
   ColorSelectorList,
 } from "@/components/motion/color-selector";
+import { BrazilFlag, UsFlag } from "@/components/flags";
 import { RadioGroup, RadioGroupItem } from "@/components/motion/radio";
 import { cn } from "@/lib/utils";
 import {
@@ -14,7 +15,12 @@ import {
   COLOR_OPTIONS,
   SHAPE_OPTIONS,
 } from "@/lib/colors";
-import type { Background, ColorName, Shape } from "@/lib/build-image-url";
+import type {
+  Background,
+  ColorName,
+  Language,
+  Shape,
+} from "@/lib/build-image-url";
 import type { Dictionary } from "@/lib/i18n";
 
 type CustomizationStepProps = {
@@ -22,10 +28,17 @@ type CustomizationStepProps = {
   background: Background;
   color: ColorName;
   shape: Shape;
+  language: Language;
   onBackgroundChange: (value: Background) => void;
   onColorChange: (value: ColorName) => void;
   onShapeChange: (value: Shape) => void;
+  onLanguageChange: (value: Language) => void;
 };
+
+const LANGUAGE_OPTIONS = [
+  { value: "en", Flag: UsFlag },
+  { value: "pt", Flag: BrazilFlag },
+] as const satisfies readonly { value: Language; Flag: unknown }[];
 
 /**
  * One bordered card per option. beUI's radio renders its own `<label>`, so
@@ -70,9 +83,11 @@ export function CustomizationStep({
   background,
   color,
   shape,
+  language,
   onBackgroundChange,
   onColorChange,
   onShapeChange,
+  onLanguageChange,
 }: CustomizationStepProps) {
   const w = t.wizard;
   // The shape previews are drawn in the commit colour picked above, so the
@@ -150,6 +165,27 @@ export function CustomizationStep({
                 style={{ backgroundColor: option.swatch }}
               />
               {w.backgrounds[option.value]}
+            </OptionCard>
+          ))}
+        </RadioGroup>
+      </div>
+
+      <div>
+        <SectionLabel>{w.language}</SectionLabel>
+        <RadioGroup
+          value={language}
+          onValueChange={(value) => onLanguageChange(value as Language)}
+          className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+        >
+          {LANGUAGE_OPTIONS.map(({ value, Flag }) => (
+            <OptionCard
+              key={value}
+              id={`language-${value}`}
+              value={value}
+              selected={value === language}
+            >
+              <Flag className="h-3.5 w-5 shrink-0 rounded-[2px]" />
+              {w.languages[value]}
             </OptionCard>
           ))}
         </RadioGroup>

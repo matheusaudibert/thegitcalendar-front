@@ -54,7 +54,7 @@ export function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
                 {t.subtitle}
               </p>
 
-              <HeroActions t={t} />
+              <HeroActions t={t} locale={locale} />
             </div>
 
             <div className="flex justify-center lg:justify-end">
